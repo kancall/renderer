@@ -1,0 +1,7 @@
+﻿  mainRender.cpp
+mainRender.obj : error LNK2019: 无法解析的外部符号 "public: __thiscall TGAImage::TGAImage(int,int,int)" (??0TGAImage@@QAE@HHH@Z)，该符号在函数 _main 中被引用
+mainRender.obj : error LNK2019: 无法解析的外部符号 "public: bool __thiscall TGAImage::write_tga_file(char const *,bool)" (?write_tga_file@TGAImage@@QAE_NPBD_N@Z)，该符号在函数 _main 中被引用
+mainRender.obj : error LNK2019: 无法解析的外部符号 "public: bool __thiscall TGAImage::flip_vertically(void)" (?flip_vertically@TGAImage@@QAE_NXZ)，该符号在函数 _main 中被引用
+mainRender.obj : error LNK2019: 无法解析的外部符号 "public: bool __thiscall TGAImage::set(int,int,struct TGAColor)" (?set@TGAImage@@QAE_NHHUTGAColor@@@Z)，该符号在函数 _main 中被引用
+mainRender.obj : error LNK2019: 无法解析的外部符号 "public: __thiscall TGAImage::~TGAImage(void)" (??1TGAImage@@QAE@XZ)，该符号在函数 _main 中被引用
+E:\vs c++ practice\Renderer\Debug\Renderer.exe : fatal error LNK1120: 5 个无法解析的外部命令
