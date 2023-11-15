@@ -67,7 +67,7 @@ void line(Vec2i a, Vec2i b, TGAImage&image,TGAColor color)
 	}
 }
 
-void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage&image, TGAColor color)
+void triangle1(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage&image, TGAColor color)
 {
 	if (t0.y < t1.y) swap(t0, t1);
 	if (t0.y < t2.y) swap(t0, t2);
@@ -122,27 +122,68 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage&image, TGAColor color)
 	}*/
 }
 
+Vec3f barycentric(Vec2i* points, Vec2i p)
+{
+	//求出来这个点在三角形中对应的u v值，然后判断u v值在不在0 1范围内
+	/*Vec3f uv = Vec3f(points[2].x - points[0].x, points[1].x - points[0].x, points[0].x - p.x) ^
+		Vec3f(points[2].y - points[0].y, points[1].y - points[0].y, points[0].y - p.y);
+	if (abs(uv.z < 1)) return Vec3f(-1, 1, 1);
+	return Vec3f(1.f - (uv.x + uv.y) / uv.z, uv.y / uv.z, uv.x / uv.z);*/
+
+	//根据https://zhuanlan.zhihu.com/p/361943207计算的，感觉原版代码有点怪怪的
+	float u =(float) ((p.y - points[2].y) * (points[0].x - points[2].x) - (p.x - points[2].x) * (points[0].y - points[2].y)) /
+		((points[1].y - points[2].y) * (points[0].x - points[2].x) - (points[1].x - points[2].x) * (points[0].y - points[2].y));
+	float v=(float) ((p.x - points[2].x) * (points[2].y - points[1].y) - (p.y - points[2].y) * (points[2].x - points[1].x)) /
+		((points[0].x - points[2].x) * (points[2].y - points[1].y) - (points[0].y - points[2].y) * (points[2].x - points[1].x));
+	return Vec3f((1 - u - v), u, v);
+}
+
+void triangle(Vec2i* points, TGAImage& image, TGAColor color)
+{
+	Vec2i bboxMax = Vec2i(0, 0), bboxMin = Vec2i(image.get_width() - 1, image.get_height() - 1);
+	
+	for (int i = 0; i < 3; i++)
+	{
+		//外面那层大小比较是看看超出边界没
+		bboxMin.x = max(0, min(bboxMin.x, points[i].x));
+		bboxMin.y = max(0, min(bboxMin.y, points[i].y));
+
+		bboxMax.x = min(image.get_width() - 1, max(bboxMax.x, points[i].x));
+		bboxMax.y = min(image.get_height() - 1, max(bboxMax.y, points[i].y));
+	}
+	Vec3f a = barycentric(points, Vec2i(300, 500));
+	for (int x = bboxMin.x; x <= bboxMax.x; x++)
+	{
+		for (int y = bboxMin.y; y <= bboxMax.y; y++)
+		{
+			Vec3f bc = barycentric(points, Vec2i(x, y));
+			if (bc.x < 0 || bc.y < 0 || bc.z < 0) //得到的重心值不在0 1范围内，所以不在三角形内
+				continue;
+
+			image.set(x, y, color);
+		}
+	}
+}
+
+
 int main()
 {
 	cout << 1;
 	int width = 800, height = 800;
 	TGAImage image(width, height, TGAImage::RGB);
-	/*Model* model = new Model("obj/african_head.obj");
+	Model* model = new Model("obj/african_head.obj");
 	for (int i = 0; i < model->nfaces(); i++)
 	{
 		vector<int> face = model->face(i);
+		Vec2i screen[3];
 		for (int t = 0; t < 3; t++)
 		{
-			Vec3f v0 = model->vert(face[t]);
-			Vec3f v1 = model->vert(face[(t + 1) % 3]);
-			int x0 = (v0.x + 1.0)*width / 2.0;
-			int y0 = (v0.y + 1.0)*height / 2.0;
-			int x1 = (v1.x + 1.0)*width / 2.0;
-			int y1 = (v1.y + 1.0)*height / 2.0;
-			line(x0, y0, x1, y1, image, white);
+			Vec3f world = model->vert(face[t]);
+			screen[t]= Vec2i((world.x + 1.) * width / 2., (world.y + 1.) * height / 2.);
 		}
-	}*/
-	triangle(Vec2i(200, 400), Vec2i(400, 450), Vec2i(300, 600), image, white);
+		Vec2i points[3] = { screen[0], screen[1], screen[2] };
+		triangle(points, image, TGAColor(rand() % 255, rand() % 255, rand() % 255, 255));
+	}
 	image.flip_vertically();
 	image.write_tga_file("output.tga");
 	return 0;
