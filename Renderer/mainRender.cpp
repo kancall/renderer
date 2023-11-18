@@ -168,6 +168,7 @@ void triangle(Vec2i* points, TGAImage& image, TGAColor color)
 
 int main()
 {
+	cout << 1;
 	int width = 800, height = 800;
 	TGAImage image(width, height, TGAImage::RGB);
 	Model* model = new Model("obj/african_head.obj");
