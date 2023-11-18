@@ -11,6 +11,26 @@ using namespace std;
 TGAColor white(255, 255, 255, 255);
 TGAColor red(255, 0, 0, 255);
 TGAColor green(0, 255, 0, 255);
+/// <summary>
+/// 求a、b向量的点乘
+/// </summary>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <returns></returns>
+float dot(Vec3f a, Vec3f b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+/// <summary>
+/// 求a、b向量的叉乘
+/// </summary>
+/// <param name="a"></param>
+/// <param name="b"></param>
+Vec3f cross(Vec3f a, Vec3f b)
+{
+	return Vec3f(a.y * b.z - b.y * a.z, -a.x * b.z + b.x * a.z, a.x * b.y - b.x * a.y);
+}
+
 void line(Vec2i a, Vec2i b, TGAImage&image,TGAColor color)
 {
 	int x0 = a.x, y0 = a.y, x1 = b.x, y1 = b.y;
@@ -168,21 +188,29 @@ void triangle(Vec2i* points, TGAImage& image, TGAColor color)
 
 int main()
 {
-	cout << 1;
 	int width = 800, height = 800;
 	TGAImage image(width, height, TGAImage::RGB);
+	Vec3f lightDir(0, 0, -1);
 	Model* model = new Model("obj/african_head.obj");
 	for (int i = 0; i < model->nfaces(); i++)
 	{
 		vector<int> face = model->face(i);
 		Vec2i screen[3];
+		Vec3f world[3];
 		for (int t = 0; t < 3; t++)
 		{
-			Vec3f world = model->vert(face[t]);
-			screen[t]= Vec2i((world.x + 1.) * width / 2., (world.y + 1.) * height / 2.);
+			Vec3f v = model->vert(face[t]);
+			screen[t]= Vec2i((v.x + 1.) * width / 2., (v.y + 1.) * height / 2.);
+			world[t] = v;
 		}
-		Vec2i points[3] = { screen[0], screen[1], screen[2] };
-		triangle(points, image, TGAColor(rand() % 255, rand() % 255, rand() % 255, 255));
+		Vec3f n = cross((world[2] - world[0]), (world[1] - world[0])); //叉乘三角形的边的向量求法向量
+		n.normalize();
+		float intensity = dot(n, lightDir); //用点乘表示两个向量之间的夹角大小，夹角越小越接近1，也说明光线越和平面垂直、平面越亮
+		if (intensity >= 0)
+		{
+			Vec2i points[3] = { screen[0], screen[1], screen[2] };
+			triangle(points, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
+		}
 	}
 	image.flip_vertically();
 	image.write_tga_file("output.tga");
