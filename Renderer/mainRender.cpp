@@ -11,6 +11,7 @@ using namespace std;
 TGAColor white(255, 255, 255, 255);
 TGAColor red(255, 0, 0, 255);
 TGAColor green(0, 255, 0, 255);
+TGAColor blue(0, 0, 255, 255);
 /// <summary>
 /// 求a、b向量的点乘
 /// </summary>
@@ -185,10 +186,28 @@ void triangle(Vec2i* points, TGAImage& image, TGAColor color)
 	}
 }
 
-
-int main()
+//ybuffer记录x轴从左到右每一个下标中的最大y值
+void rasterize(Vec2i a, Vec2i b, TGAImage& image, TGAColor color, vector<int>& ybuffer)
 {
-	int width = 800, height = 800;
+	if (a.x > b.x)
+		swap(a, b);
+
+	for (int x = a.x; x <= b.x; x++)
+	{
+		float t = (float)(x - a.x) / (b.x - a.x);
+		int y = a.y + t * (b.y - a.y);
+		if (ybuffer[x] < y)
+		{
+			//将y值最大的那个点绘制到图片上
+			ybuffer[x] = y;
+			image.set(x, 8, color);
+		}
+	}
+}
+
+void scene()
+{
+	/*int width = 800, height = 800;
 	TGAImage image(width, height, TGAImage::RGB);
 	Vec3f lightDir(0, 0, -1);
 	Model* model = new Model("obj/african_head.obj");
@@ -200,7 +219,7 @@ int main()
 		for (int t = 0; t < 3; t++)
 		{
 			Vec3f v = model->vert(face[t]);
-			screen[t]= Vec2i((v.x + 1.) * width / 2., (v.y + 1.) * height / 2.);
+			screen[t] = Vec2i((v.x + 1.) * width / 2., (v.y + 1.) * height / 2.);
 			world[t] = v;
 		}
 		Vec3f n = cross((world[2] - world[0]), (world[1] - world[0])); //叉乘三角形的边的向量求法向量
@@ -211,8 +230,19 @@ int main()
 			Vec2i points[3] = { screen[0], screen[1], screen[2] };
 			triangle(points, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
 		}
-	}
-	image.flip_vertically();
-	image.write_tga_file("output.tga");
+	}*/
+	TGAImage myScene(800, 16, TGAImage::RGB);
+	//ybuffer[index]中，index代表x轴的坐标，代表x轴从左到右，每一个下标上记录物体最大的y值
+	vector<int>	ybuffer(1600, INT_MIN);
+	rasterize(Vec2i(20, 34), Vec2i(744, 400), myScene, red, ybuffer);
+	rasterize(Vec2i(120, 434), Vec2i(444, 400), myScene, green, ybuffer);
+	rasterize(Vec2i(330, 463), Vec2i(594, 200), myScene, blue, ybuffer);
+
+	myScene.flip_vertically();
+	myScene.write_tga_file("output.tga");
+}
+int main()
+{
+	scene();
 	return 0;
 }
