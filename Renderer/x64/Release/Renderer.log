@@ -1,10 +1,36 @@
 ﻿  mainRender.cpp
 E:\vs c++ practice\renderer\Renderer\mainRender.cpp(104,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
 E:\vs c++ practice\renderer\Renderer\mainRender.cpp(105,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(198,9): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(187,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
+          with
+          [
+              _Ty=int
+          ]
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(214,74): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
+          with
+          [
+              t=float
+          ]
+          and
+          [
+              t=int
+          ]
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(214,67): warning C4244: “参数”: 从“double”转换到“t”，可能丢失数据
+          with
+          [
+              t=int
+          ]
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(214,41): warning C4244: “参数”: 从“double”转换到“t”，可能丢失数据
+          with
+          [
+              t=int
+          ]
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(223,90): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(223,73): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(223,56): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
   正在生成代码
-  2 of 220 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+  2 of 403 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   Renderer.vcxproj -> E:\vs c++ practice\renderer\x64\Release\Renderer.exe

@@ -143,7 +143,13 @@ void triangle1(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage&image, TGAColor color)
 	}*/
 }
 
-Vec3f barycentric(Vec2i* points, Vec2i p)
+/// <summary>
+/// 计算该点在三角形中的重心坐标
+/// </summary>
+/// <param name="points"></param>
+/// <param name="p"></param>
+/// <returns></returns>
+Vec3f barycentric(Vec3i* points, Vec2i p)
 {
 	//求出来这个点在三角形中对应的u v值，然后判断u v值在不在0 1范围内
 	/*Vec3f uv = Vec3f(points[2].x - points[0].x, points[1].x - points[0].x, points[0].x - p.x) ^
@@ -159,7 +165,7 @@ Vec3f barycentric(Vec2i* points, Vec2i p)
 	return Vec3f((1 - u - v), u, v);
 }
 
-void triangle(Vec2i* points, TGAImage& image, TGAColor color)
+void triangle(Vec3i* points, vector<vector<int>>&zbuffer, TGAImage& image, TGAColor color)
 {
 	Vec2i bboxMax = Vec2i(0, 0), bboxMin = Vec2i(image.get_width() - 1, image.get_height() - 1);
 	
@@ -172,7 +178,7 @@ void triangle(Vec2i* points, TGAImage& image, TGAColor color)
 		bboxMax.x = min(image.get_width() - 1, max(bboxMax.x, points[i].x));
 		bboxMax.y = min(image.get_height() - 1, max(bboxMax.y, points[i].y));
 	}
-	Vec3f a = barycentric(points, Vec2i(300, 500));
+
 	for (int x = bboxMin.x; x <= bboxMax.x; x++)
 	{
 		for (int y = bboxMin.y; y <= bboxMax.y; y++)
@@ -181,45 +187,40 @@ void triangle(Vec2i* points, TGAImage& image, TGAColor color)
 			if (bc.x < 0 || bc.y < 0 || bc.z < 0) //得到的重心值不在0 1范围内，所以不在三角形内
 				continue;
 
-			image.set(x, y, color);
-		}
-	}
-}
-
-//ybuffer记录x轴从左到右每一个下标中的最大y值
-void rasterize(Vec2i a, Vec2i b, TGAImage& image, TGAColor color, vector<int>& ybuffer)
-{
-	if (a.x > b.x)
-		swap(a, b);
-
-	for (int x = a.x; x <= b.x; x++)
-	{
-		float t = (float)(x - a.x) / (b.x - a.x);
-		int y = a.y + t * (b.y - a.y);
-		if (ybuffer[x] < y)
-		{
-			//将y值最大的那个点绘制到图片上
-			ybuffer[x] = y;
-			image.set(x, 8, color);
+			//根据重心坐标三个分量，求点的z值
+			float z = points[0].z * bc.x + points[0].z * bc.y + points[0].z * bc.z;
+			if (zbuffer[x][y] < z)
+			{
+				zbuffer[x][y] = z;
+				image.set(x, y, color);
+			}
 		}
 	}
 }
 
 void scene()
 {
-	/*int width = 800, height = 800;
+	
+}
+
+int main()
+{
+	int width = 800, height = 800;
 	TGAImage image(width, height, TGAImage::RGB);
+
 	Vec3f lightDir(0, 0, -1);
+	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN)); //坐标是右手系，所以z轴是垂直屏幕向外的
 	Model* model = new Model("obj/african_head.obj");
+
 	for (int i = 0; i < model->nfaces(); i++)
 	{
 		vector<int> face = model->face(i);
-		Vec2i screen[3];
+		Vec3i screen[3];
 		Vec3f world[3];
 		for (int t = 0; t < 3; t++)
 		{
 			Vec3f v = model->vert(face[t]);
-			screen[t] = Vec2i((v.x + 1.) * width / 2., (v.y + 1.) * height / 2.);
+			screen[t] = Vec3i((v.x + 1.) * width / 2., (v.y + 1.) * height / 2., v.z);
 			world[t] = v;
 		}
 		Vec3f n = cross((world[2] - world[0]), (world[1] - world[0])); //叉乘三角形的边的向量求法向量
@@ -227,22 +228,12 @@ void scene()
 		float intensity = dot(n, lightDir); //用点乘表示两个向量之间的夹角大小，夹角越小越接近1，也说明光线越和平面垂直、平面越亮
 		if (intensity >= 0)
 		{
-			Vec2i points[3] = { screen[0], screen[1], screen[2] };
-			triangle(points, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
+			Vec3i points[3] = { screen[0], screen[1], screen[2] };
+			triangle(points, zbuffer, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
 		}
-	}*/
-	TGAImage myScene(800, 16, TGAImage::RGB);
-	//ybuffer[index]中，index代表x轴的坐标，代表x轴从左到右，每一个下标上记录物体最大的y值
-	vector<int>	ybuffer(1600, INT_MIN);
-	rasterize(Vec2i(20, 34), Vec2i(744, 400), myScene, red, ybuffer);
-	rasterize(Vec2i(120, 434), Vec2i(444, 400), myScene, green, ybuffer);
-	rasterize(Vec2i(330, 463), Vec2i(594, 200), myScene, blue, ybuffer);
+	}
 
-	myScene.flip_vertically();
-	myScene.write_tga_file("output.tga");
-}
-int main()
-{
-	scene();
+	image.flip_vertically();
+	image.write_tga_file("output.tga");
 	return 0;
 }
