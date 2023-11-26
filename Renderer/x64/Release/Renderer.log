@@ -1,36 +1,70 @@
 ﻿  mainRender.cpp
 E:\vs c++ practice\renderer\Renderer\mainRender.cpp(104,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
 E:\vs c++ practice\renderer\Renderer\mainRender.cpp(105,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(187,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(194,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
           with
           [
               _Ty=int
           ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(214,74): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(224,74): warning C4244: “参数”: 从“T”转换到“T”，可能丢失数据
           with
           [
-              t=float
+              T=float
           ]
           and
           [
-              t=int
+              T=int
           ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(214,67): warning C4244: “参数”: 从“double”转换到“t”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(224,67): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
           with
           [
-              t=int
+              T=int
           ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(214,41): warning C4244: “参数”: 从“double”转换到“t”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(224,41): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
           with
           [
-              t=int
+              T=int
           ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(223,90): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(223,73): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(223,56): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(234,101): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(234,84): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(234,67): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\geometry.h(64,41): warning C4244: “*=”: 从“const U”转换到“T”，可能丢失数据
+          with
+          [
+              U=float
+          ]
+          and
+          [
+              T=int
+          ]
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(189,26): message : 查看对正在编译的函数 模板 实例化“vec<2,int> operator *<2,int,T>(vec<2,int>,const U &)”的引用
+          with
+          [
+              T=float,
+              U=float
+          ]
+  model.cpp
+E:\vs c++ practice\renderer\Renderer\model.cpp(88,65): warning C4244: “参数”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+E:\vs c++ practice\renderer\Renderer\model.cpp(88,28): warning C4244: “参数”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
   正在生成代码
-  2 of 403 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+  2 of 592 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   Renderer.vcxproj -> E:\vs c++ practice\renderer\x64\Release\Renderer.exe

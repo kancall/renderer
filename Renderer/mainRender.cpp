@@ -165,7 +165,7 @@ Vec3f barycentric(Vec3i* points, Vec2i p)
 	return Vec3f((1 - u - v), u, v);
 }
 
-void triangle(Vec3i* points, vector<vector<int>>&zbuffer, TGAImage& image, TGAColor color)
+void triangle(Model* model, Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image, TGAColor color) 
 {
 	Vec2i bboxMax = Vec2i(0, 0), bboxMin = Vec2i(image.get_width() - 1, image.get_height() - 1);
 	
@@ -186,13 +186,13 @@ void triangle(Vec3i* points, vector<vector<int>>&zbuffer, TGAImage& image, TGACo
 			Vec3f bc = barycentric(points, Vec2i(x, y));
 			if (bc.x < 0 || bc.y < 0 || bc.z < 0) //得到的重心值不在0 1范围内，所以不在三角形内
 				continue;
-
+			Vec2i pixelUV = uv[0] * bc.x + uv[1] * bc.y + uv[2] * bc.z;
 			//根据重心坐标三个分量，求点的z值
 			float z = points[0].z * bc.x + points[0].z * bc.y + points[0].z * bc.z;
 			if (zbuffer[x][y] < z)
 			{
 				zbuffer[x][y] = z;
-				image.set(x, y, color);
+				image.set(x, y, model->getTextureColor(pixelUV));
 			}
 		}
 	}
@@ -205,9 +205,9 @@ void scene()
 
 int main()
 {
-	int width = 800, height = 800;
+	int width = 1024, height = 1024;
 	TGAImage image(width, height, TGAImage::RGB);
-
+	
 	Vec3f lightDir(0, 0, -1);
 	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN)); //坐标是右手系，所以z轴是垂直屏幕向外的
 	Model* model = new Model("obj/african_head.obj");
@@ -217,11 +217,13 @@ int main()
 		vector<int> face = model->face(i);
 		Vec3i screen[3];
 		Vec3f world[3];
+		Vec2i uv[3];
 		for (int t = 0; t < 3; t++)
 		{
 			Vec3f v = model->vert(face[t]);
 			screen[t] = Vec3i((v.x + 1.) * width / 2., (v.y + 1.) * height / 2., v.z);
 			world[t] = v;
+			uv[t] = model->uv(i, t);
 		}
 		Vec3f n = cross((world[2] - world[0]), (world[1] - world[0])); //叉乘三角形的边的向量求法向量
 		n.normalize();
@@ -229,7 +231,7 @@ int main()
 		if (intensity >= 0)
 		{
 			Vec3i points[3] = { screen[0], screen[1], screen[2] };
-			triangle(points, zbuffer, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
+			triangle(model, points, uv, zbuffer, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
 		}
 	}
 
