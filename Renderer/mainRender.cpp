@@ -18,6 +18,10 @@ const int width = 800;
 const int height = 800;
 const int depth = 255;
 
+Vec3f camera(2, 1, 1);
+Vec3f center(0, 0, 0);
+Vec3f up(0, 1, 0);
+
 /// <summary>
 /// 求a、b向量的点乘
 /// </summary>
@@ -278,6 +282,26 @@ void triangle(Model* model, Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuff
 	}
 }
 
+Matrix lookAt(Vec3f camera, Vec3f center, Vec3f up)
+{
+	Vec3f z = (camera - center).normalize();
+	Vec3f x = cross(up, z).normalize();
+	Vec3f y = cross(z, x).normalize();
+
+	Matrix Mr = Matrix::identity(4);
+	Matrix Mt = Matrix::identity(4);
+	for (int i = 0; i < 3; i++)
+	{
+		//平移矩阵
+		Mt[i][3] = -center[i];
+		//旋转矩阵
+		Mr[0][i] = x[i];
+		Mr[1][i] = y[i];
+		Mr[2][i] = z[i];
+	}
+	return Mr * Mt;
+}
+
 void scene()
 {
 	Model* model = new Model("obj/cube.obj");
@@ -338,9 +362,10 @@ int main()
 	Matrix Projection = Matrix::identity(4);
 	float c = 3; //摄像机距离
 	Projection[3][2] = -1.f / c;
-
 	//视角矩阵
 	Matrix Viewport = viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
+	//模型矩阵
+	Matrix ModelView = lookAt(camera, center, up);
 
 	for (int i = 0; i < model->nfaces(); i++)
 	{
@@ -351,7 +376,7 @@ int main()
 		for (int t = 0; t < 3; t++)
 		{
 			Vec3f v = model->vert(face[t]);
-			Vec3f screenFloat = m2v(Viewport * Projection * v2m(v)); //透视投影
+			Vec3f screenFloat = m2v(Viewport * Projection * ModelView * v2m(v)); //透视投影
 			screen[t] = Vec3i(screenFloat[0], screenFloat[1], screenFloat[2]); //geometry.cpp的vec3i和vec3f之间的转换出了点问题，所以先手动转一下
 			world[t] = v;
 			uv[t] = model->uv(i, t);
