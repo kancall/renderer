@@ -1,15 +1,19 @@
-e:\vs c++ practice\renderer\renderer\x64\release\vc143.pdb
-e:\vs c++ practice\renderer\renderer\x64\release\tgaimage.obj
-e:\vs c++ practice\renderer\renderer\x64\release\model.obj
-e:\vs c++ practice\renderer\renderer\x64\release\mainrender.obj
-e:\vs c++ practice\renderer\x64\release\renderer.exe
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.ipdb
-e:\vs c++ practice\renderer\x64\release\renderer.pdb
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.iobj
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.tlog\cl.command.1.tlog
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.tlog\cl.items.tlog
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.tlog\cl.read.1.tlog
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.tlog\cl.write.1.tlog
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.tlog\link.command.1.tlog
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.tlog\link.read.1.tlog
-e:\vs c++ practice\renderer\renderer\x64\release\renderer.tlog\link.write.1.tlog
+d:\renderer\renderer\x64\release\vc143.pdb
+d:\renderer\renderer\x64\release\tgaimage.obj
+d:\renderer\renderer\x64\release\model.obj
+d:\renderer\renderer\x64\release\mainrender.obj
+d:\renderer\renderer\x64\release\geometry.obj
+d:\renderer\x64\release\renderer.ipdb
+d:\renderer\x64\release\renderer.iobj
+d:\renderer\x64\release\renderer.exe
+d:\renderer\renderer\x64\release\renderer.ipdb
+d:\renderer\x64\release\renderer.pdb
+d:\renderer\renderer\x64\release\renderer.iobj
+d:\renderer\renderer\x64\release\renderer.tlog\cl.command.1.tlog
+d:\renderer\renderer\x64\release\renderer.tlog\cl.items.tlog
+d:\renderer\renderer\x64\release\renderer.tlog\cl.read.1.tlog
+d:\renderer\renderer\x64\release\renderer.tlog\cl.write.1.tlog
+d:\renderer\renderer\x64\release\renderer.tlog\link.command.1.tlog
+d:\renderer\renderer\x64\release\renderer.tlog\link.read.1.tlog
+d:\renderer\renderer\x64\release\renderer.tlog\link.write.1.tlog
+d:\renderer\renderer\x64\release\renderer.tlog\link.write.2u.tlog

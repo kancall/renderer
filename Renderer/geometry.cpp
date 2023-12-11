@@ -4,6 +4,17 @@
 #include <iostream>
 #include "geometry.h"
 
+template <> Vec3<float>::Vec3(Matrix m) : x(m[0][0] / m[3][0]), y(m[1][0] / m[3][0]), z(m[2][0] / m[3][0]) {}
+template <> template <> Vec3<int>::Vec3(const Vec3<float>& v) : x(int(v.x + .5)), y(int(v.y + .5)), z(int(v.z + .5)) {}
+template <> template <> Vec3<float>::Vec3(const Vec3<int>& v) : x(v.x), y(v.y), z(v.z) {}
+
+Matrix::Matrix(Vec3f v) : m(std::vector<std::vector<float> >(4, std::vector<float>(1, 1.f))), rows(4), cols(1) {
+    m[0][0] = v.x;
+    m[1][0] = v.y;
+    m[2][0] = v.z;
+}
+
+
 Matrix::Matrix(int r, int c) : m(std::vector<std::vector<float> >(r, std::vector<float>(c, 0.f))), rows(r), cols(c) { }
 
 int Matrix::nrows() {
@@ -14,7 +25,6 @@ int Matrix::ncols() {
     return cols;
 }
 
-//返回一个n*n的、没有任何效果的齐次坐标
 Matrix Matrix::identity(int dimensions) {
     Matrix E(dimensions, dimensions);
     for (int i = 0; i < dimensions; i++) {
@@ -54,7 +64,7 @@ Matrix Matrix::transpose() {
 
 Matrix Matrix::inverse() {
     assert(rows == cols);
-    // augmenting the square matrix with the identity matrix of the same dimensions A => [AI]
+    // augmenting the square matrix with the identity matrix of the same dimensions a => [ai]
     Matrix result(rows, cols * 2);
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < cols; j++)

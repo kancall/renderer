@@ -3,94 +3,96 @@
 
 #include <fstream>
 
-#pragma pack(push,1) //struct按照1字节对齐，一共18字节的数据
-struct TGA_Header { //保存TGA文件的必要信息
-	char idlength; //图像信息字段长度
-	char colormaptype; //颜色表
-	char datatypecode; //图像类型
-	short colormaporigin; //颜色表首地址
-	short colormaplength; //颜色表长度
-	char colormapdepth; //颜色表每个表项占用的位数
-	short x_origin; //图像x轴的起始坐标
-	short y_origin; //图像y轴的起始坐标
-	short width;//图像宽度
-	short height; //图像高度
-	char  bitsperpixel; //每个像素占用的位数
-	char  imagedescriptor; //图像描述符
+#pragma pack(push,1)
+struct TGA_Header {
+    char idlength;
+    char colormaptype;
+    char datatypecode;
+    short colormaporigin;
+    short colormaplength;
+    char colormapdepth;
+    short x_origin;
+    short y_origin;
+    short width;
+    short height;
+    char  bitsperpixel;
+    char  imagedescriptor;
 };
 #pragma pack(pop)
 
 
-//存储图片中每一个像素的颜色值
+
 struct TGAColor {
-	union {
-		struct {
-			unsigned char b, g, r, a;
-		};
-		unsigned char raw[4];
-		unsigned int val;
-	};
-	int bytespp;
+    unsigned char bgra[4];
+    unsigned char bytespp;
 
-	TGAColor() : val(0), bytespp(1) {
-	}
+    TGAColor() : bgra(), bytespp(1) {
+        for (int i = 0; i < 4; i++) bgra[i] = 0;
+    }
 
-	TGAColor(unsigned char R, unsigned char G, unsigned char B, unsigned char A) : b(B), g(G), r(R), a(A), bytespp(4) {
-	}
+    TGAColor(unsigned char R, unsigned char G, unsigned char B, unsigned char A = 255) : bgra(), bytespp(4) {
+        bgra[0] = B;
+        bgra[1] = G;
+        bgra[2] = R;
+        bgra[3] = A;
+    }
 
-	TGAColor(int v, int bpp) : val(v), bytespp(bpp) {
-	}
+    TGAColor(unsigned char v) : bgra(), bytespp(1) {
+        for (int i = 0; i < 4; i++) bgra[i] = 0;
+        bgra[0] = v;
+    }
 
-	TGAColor(const TGAColor &c) : val(c.val), bytespp(c.bytespp) {
-	}
 
-	TGAColor(const unsigned char *p, int bpp) : val(0), bytespp(bpp) {
-		for (int i=0; i<bpp; i++) {
-			raw[i] = p[i];
-		}
-	}
+    TGAColor(const unsigned char* p, unsigned char bpp) : bgra(), bytespp(bpp) {
+        for (int i = 0; i < (int)bpp; i++) {
+            bgra[i] = p[i];
+        }
+        for (int i = bpp; i < 4; i++) {
+            bgra[i] = 0;
+        }
+    }
 
-	TGAColor & operator =(const TGAColor &c) {
-		if (this != &c) {
-			bytespp = c.bytespp;
-			val = c.val;
-		}
-		return *this;
-	}
+    TGAColor operator *(float intensity) const {
+        TGAColor res = *this;
+        intensity = (intensity > 1.f ? 1.f : (intensity < 0.f ? 0.f : intensity));
+        for (int i = 0; i < 4; i++) res.bgra[i] = bgra[i] * intensity;
+        return res;
+    }
 };
 
-//TGA图片
+
 class TGAImage {
 protected:
-	unsigned char* data; //存放TGA图片读取到的像素数据
-	int width;
-	int height;
-	int bytespp; //bits per pixel，存储像素深度，8、16、24bits等
+    unsigned char* data;
+    int width;
+    int height;
+    int bytespp;
 
-	bool   load_rle_data(std::ifstream &in);
-	bool unload_rle_data(std::ofstream &out);
+    bool   load_rle_data(std::ifstream& in);
+    bool unload_rle_data(std::ofstream& out);
 public:
-	enum Format {
-		GRAYSCALE=1, RGB=3, RGBA=4
-	};
+    enum Format {
+        GRAYSCALE = 1, RGB = 3, RGBA = 4
+    };
 
-	TGAImage();
-	TGAImage(int w, int h, int bpp);
-	TGAImage(const TGAImage &img);
-	bool read_tga_file(const char *filename); //读取图片
-	bool write_tga_file(const char *filename, bool rle=true);
-	bool flip_horizontally();
-	bool flip_vertically();
-	bool scale(int w, int h);
-	TGAColor get(int x, int y); //根据屏幕坐标获取像素颜色
-	bool set(int x, int y, TGAColor c);
-	~TGAImage();
-	TGAImage & operator =(const TGAImage &img);
-	int get_width();
-	int get_height();
-	int get_bytespp();
-	unsigned char *buffer();
-	void clear();
+    TGAImage();
+    TGAImage(int w, int h, int bpp);
+    TGAImage(const TGAImage& img);
+    bool read_tga_file(const char* filename);
+    bool write_tga_file(const char* filename, bool rle = true);
+    bool flip_horizontally();
+    bool flip_vertically();
+    bool scale(int w, int h);
+    TGAColor get(int x, int y);
+    bool set(int x, int y, TGAColor& c);
+    bool set(int x, int y, const TGAColor& c);
+    ~TGAImage();
+    TGAImage& operator =(const TGAImage& img);
+    int get_width();
+    int get_height();
+    int get_bytespp();
+    unsigned char* buffer();
+    void clear();
 };
 
 #endif //__IMAGE_H__

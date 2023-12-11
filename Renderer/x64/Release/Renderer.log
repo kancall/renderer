@@ -1,17 +1,48 @@
-﻿  mainRender.cpp
-D:\Renderer\Renderer\mainRender.cpp(107,13): warning C4244: “初始化”: 从“t”转换到“int”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(107,13): warning C4244:         with
-D:\Renderer\Renderer\mainRender.cpp(107,13): warning C4244:         [
-D:\Renderer\Renderer\mainRender.cpp(107,13): warning C4244:             t=float
-D:\Renderer\Renderer\mainRender.cpp(107,13): warning C4244:         ]
-D:\Renderer\Renderer\mainRender.cpp(109,9): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(188,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+﻿  geometry.cpp
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244: “初始化”: 从“const t”转换到“t”，可能丢失数据
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244:         with
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244:         [
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244:             t=int
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244:         ]
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244:         and
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244:         [
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244:             t=float
+D:\Renderer\Renderer\geometry.cpp(9,66): warning C4244:         ]
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244: “初始化”: 从“const t”转换到“t”，可能丢失数据
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244:         with
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244:         [
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244:             t=int
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244:         ]
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244:         and
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244:         [
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244:             t=float
+D:\Renderer\Renderer\geometry.cpp(9,74): warning C4244:         ]
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244: “初始化”: 从“const t”转换到“t”，可能丢失数据
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244:         with
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244:         [
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244:             t=int
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244:         ]
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244:         and
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244:         [
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244:             t=float
+D:\Renderer\Renderer\geometry.cpp(9,82): warning C4244:         ]
+  mainRender.cpp
+D:\Renderer\Renderer\tgaimage.h(58,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+  (编译源文件“mainRender.cpp”)
+  
+D:\Renderer\Renderer\mainRender.cpp(108,13): warning C4244: “初始化”: 从“t”转换到“int”，可能丢失数据
+D:\Renderer\Renderer\mainRender.cpp(108,13): warning C4244:         with
+D:\Renderer\Renderer\mainRender.cpp(108,13): warning C4244:         [
+D:\Renderer\Renderer\mainRender.cpp(108,13): warning C4244:             t=float
+D:\Renderer\Renderer\mainRender.cpp(108,13): warning C4244:         ]
+D:\Renderer\Renderer\mainRender.cpp(110,9): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
 D:\Renderer\Renderer\mainRender.cpp(189,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(278,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(278,21): warning C4244:         with
-D:\Renderer\Renderer\mainRender.cpp(278,21): warning C4244:         [
-D:\Renderer\Renderer\mainRender.cpp(278,21): warning C4244:             _Ty=int
-D:\Renderer\Renderer\mainRender.cpp(278,21): warning C4244:         ]
+D:\Renderer\Renderer\mainRender.cpp(190,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
+D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244:         with
+D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244:         [
+D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244:             _Ty=int
+D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244:         ]
 D:\Renderer\Renderer\mainRender.cpp(380,67): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
 D:\Renderer\Renderer\mainRender.cpp(380,67): warning C4244:         with
 D:\Renderer\Renderer\mainRender.cpp(380,67): warning C4244:         [
@@ -39,34 +70,53 @@ D:\Renderer\Renderer\mainRender.cpp(380,35): warning C4244:         and
 D:\Renderer\Renderer\mainRender.cpp(380,35): warning C4244:         [
 D:\Renderer\Renderer\mainRender.cpp(380,35): warning C4244:             t=int
 D:\Renderer\Renderer\mainRender.cpp(380,35): warning C4244:         ]
-D:\Renderer\Renderer\mainRender.cpp(390,101): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(390,84): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(390,67): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-D:\Renderer\Renderer\geometry.h(25,74): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
-D:\Renderer\Renderer\geometry.h(25,74): warning C4244:         with
-D:\Renderer\Renderer\geometry.h(25,74): warning C4244:         [
-D:\Renderer\Renderer\geometry.h(25,74): warning C4244:             t=int
-D:\Renderer\Renderer\geometry.h(25,74): warning C4244:         ]
+D:\Renderer\Renderer\geometry.h(15,74): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
+D:\Renderer\Renderer\geometry.h(15,74): warning C4244:         with
+D:\Renderer\Renderer\geometry.h(15,74): warning C4244:         [
+D:\Renderer\Renderer\geometry.h(15,74): warning C4244:             t=int
+D:\Renderer\Renderer\geometry.h(15,74): warning C4244:         ]
   (编译源文件“mainRender.cpp”)
-  D:\Renderer\Renderer\geometry.h(25,74):
+  D:\Renderer\Renderer\geometry.h(15,74):
   模板实例化上下文(最早的实例化上下文)为
-  	D:\Renderer\Renderer\mainRender.cpp(175,6):
+  	D:\Renderer\Renderer\mainRender.cpp(176,6):
   	查看对正在编译的 类 模板 实例化“Vec2<int>”的引用
-  	D:\Renderer\Renderer\geometry.h(25,13):
+  	D:\Renderer\Renderer\geometry.h(15,13):
   	在编译 类 模板 成员函数“Vec2<int> Vec2<int>::operator *(float) const”时
-  		D:\Renderer\Renderer\mainRender.cpp(273,48):
+  		D:\Renderer\Renderer\mainRender.cpp(274,48):
   		请参阅 "triangle" 中对 "Vec2<int>::operator *" 的第一个引用
   
-D:\Renderer\Renderer\geometry.h(25,67): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
-D:\Renderer\Renderer\geometry.h(25,67): warning C4244:         with
-D:\Renderer\Renderer\geometry.h(25,67): warning C4244:         [
-D:\Renderer\Renderer\geometry.h(25,67): warning C4244:             t=int
-D:\Renderer\Renderer\geometry.h(25,67): warning C4244:         ]
+D:\Renderer\Renderer\geometry.h(15,67): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
+D:\Renderer\Renderer\geometry.h(15,67): warning C4244:         with
+D:\Renderer\Renderer\geometry.h(15,67): warning C4244:         [
+D:\Renderer\Renderer\geometry.h(15,67): warning C4244:             t=int
+D:\Renderer\Renderer\geometry.h(15,67): warning C4244:         ]
   (编译源文件“mainRender.cpp”)
   
+  model.cpp
+D:\Renderer\Renderer\tgaimage.h(58,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+  (编译源文件“model.cpp”)
+  
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244:         with
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244:         [
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244:             t=float
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244:         ]
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244:         and
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244:         [
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244:             t=int
+D:\Renderer\Renderer\model.cpp(87,65): warning C4244:         ]
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244:         with
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244:         [
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244:             t=float
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244:         ]
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244:         and
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244:         [
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244:             t=int
+D:\Renderer\Renderer\model.cpp(87,28): warning C4244:         ]
   正在生成代码
-  15 of 710 functions ( 2.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    5 functions had inline decision re-evaluated but remain unchanged
+  99 of 705 functions (14.0%) were compiled, the rest were copied from previous compilation.
+    12 functions were new in current compilation
+    23 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   Renderer.vcxproj -> D:\Renderer\x64\Release\Renderer.exe

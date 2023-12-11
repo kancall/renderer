@@ -18,9 +18,10 @@ const int width = 800;
 const int height = 800;
 const int depth = 255;
 
-Vec3f camera(2, 1, 1);
+Vec3f camera(2, 1, 4);
 Vec3f center(0, 0, 0);
 Vec3f up(0, 1, 0);
+Vec3f lightDir(0, 0, -1);
 
 /// <summary>
 /// 求a、b向量的点乘
@@ -249,7 +250,7 @@ Vec3f barycentric(Vec3i* points, Vec2i p)
 	return Vec3f((1 - u - v), u, v);
 }
 
-void triangle(Model* model, Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image, TGAColor color)
+void triangle(Model* model, Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image, float intensity)
 {
 	Vec2i bboxMax = Vec2i(0, 0), bboxMin = Vec2i(image.get_width() - 1, image.get_height() - 1);
 
@@ -276,7 +277,8 @@ void triangle(Model* model, Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuff
 			if (zbuffer[x][y] < z)
 			{
 				zbuffer[x][y] = z;
-				image.set(x, y, model->getTextureColor(pixelUV));
+				TGAColor color = model->getTextureColor(pixelUV);
+				image.set(x, y, TGAColor(color.bgra[2], color.bgra[1], color.bgra[0]) * intensity);
 			}
 		}
 	}
@@ -354,14 +356,12 @@ int main()
 	int width = 1024, height = 1024;
 	TGAImage image(width, height, TGAImage::RGB);
 
-	Vec3f lightDir(0, 0, -1);
 	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN)); //坐标是右手系，所以z轴是垂直屏幕向外的
 	Model* model = new Model("obj/african_head.obj");
 
 	//透视矩阵
 	Matrix Projection = Matrix::identity(4);
-	float c = 3; //摄像机距离
-	Projection[3][2] = -1.f / c;
+	Projection[3][2] = -1.f / (camera - center).norm();
 	//视角矩阵
 	Matrix Viewport = viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
 	//模型矩阵
@@ -387,7 +387,7 @@ int main()
 		if (intensity >= 0)
 		{
 			Vec3i points[3] = { screen[0], screen[1], screen[2] };
-			triangle(model, points, uv, zbuffer, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
+			triangle(model, points, uv, zbuffer, image, intensity);
 		}
 	}
 
