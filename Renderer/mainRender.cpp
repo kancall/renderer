@@ -23,22 +23,13 @@ Vec3f center(0, 0, 0);
 Vec3f up(0, 1, 0);
 Vec3f lightDir(0, 0, -1);
 
-/// <summary>
-/// 求a、b向量的点乘
-/// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <returns></returns>
+Model* model = nullptr;
+
 float dot(Vec3f a, Vec3f b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-/// <summary>
-/// 求a、b向量的叉乘
-/// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
 Vec3f cross(Vec3f a, Vec3f b)
 {
 	return Vec3f(a.y * b.z - b.y * a.z, -a.x * b.z + b.x * a.z, a.x * b.y - b.x * a.y);
@@ -59,6 +50,7 @@ Matrix v2m(Vec3f v) {
 	return m;
 }
 
+//ViewPort Transformation，将坐标从【-1，1】的范围映射到屏幕输出的范围中
 Matrix viewport(int x, int y, int w, int h) {
 	Matrix m = Matrix::identity(4);
 	m[0][3] = x + w / 2.f;
@@ -250,7 +242,7 @@ Vec3f barycentric(Vec3i* points, Vec2i p)
 	return Vec3f((1 - u - v), u, v);
 }
 
-void triangle(Model* model, Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image, float intensity)
+void triangle(Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image, float intensity)
 {
 	Vec2i bboxMax = Vec2i(0, 0), bboxMin = Vec2i(image.get_width() - 1, image.get_height() - 1);
 
@@ -353,16 +345,15 @@ void scene()
 
 int main()
 {
-	int width = 1024, height = 1024;
 	TGAImage image(width, height, TGAImage::RGB);
 
 	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN)); //坐标是右手系，所以z轴是垂直屏幕向外的
-	Model* model = new Model("obj/african_head.obj");
+	model = new Model("obj/african_head.obj");
 
 	//透视矩阵
 	Matrix Projection = Matrix::identity(4);
 	Projection[3][2] = -1.f / (camera - center).norm();
-	//视角矩阵
+	//视口矩阵
 	Matrix Viewport = viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
 	//模型矩阵
 	Matrix ModelView = lookAt(camera, center, up);
@@ -376,7 +367,7 @@ int main()
 		for (int t = 0; t < 3; t++)
 		{
 			Vec3f v = model->vert(face[t]);
-			Vec3f screenFloat = m2v(Viewport * Projection * ModelView * v2m(v)); //透视投影
+			Vec3f screenFloat = m2v(Viewport * Projection * ModelView * v2m(v)); //这一步将我们模型的点转换到了屏幕上，仔细看会发现中间少了一步World Space到Camera Space的视角变换，其实是因为目前的场景里只有一个模型，所以就和ModelView合并了
 			screen[t] = Vec3i(screenFloat[0], screenFloat[1], screenFloat[2]); //geometry.cpp的vec3i和vec3f之间的转换出了点问题，所以先手动转一下
 			world[t] = v;
 			uv[t] = model->uv(i, t);
@@ -387,7 +378,7 @@ int main()
 		if (intensity >= 0)
 		{
 			Vec3i points[3] = { screen[0], screen[1], screen[2] };
-			triangle(model, points, uv, zbuffer, image, intensity);
+			triangle(points, uv, zbuffer, image, intensity);
 		}
 	}
 
