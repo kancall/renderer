@@ -234,14 +234,15 @@ Vec3f barycentric(Vec3i* points, Vec2i p)
 	if (abs(uv.z < 1)) return Vec3f(-1, 1, 1);
 	return Vec3f(1.f - (uv.x + uv.y) / uv.z, uv.y / uv.z, uv.x / uv.z);*/
 
-	//根据https://zhuanlan.zhihu.com/p/361943207计算的，感觉原版代码有点怪怪的
-	float u = (float)((p.y - points[2].y) * (points[0].x - points[2].x) - (p.x - points[2].x) * (points[0].y - points[2].y)) /
-		((points[1].y - points[2].y) * (points[0].x - points[2].x) - (points[1].x - points[2].x) * (points[0].y - points[2].y));
-	float v = (float)((p.x - points[2].x) * (points[2].y - points[1].y) - (p.y - points[2].y) * (points[2].x - points[1].x)) /
-		((points[0].x - points[2].x) * (points[2].y - points[1].y) - (points[0].y - points[2].y) * (points[2].x - points[1].x));
-	return Vec3f((1 - u - v), u, v);
+	//根据games101 p9 16分12的公式算的
+	float u = (float)((p.y - points[1].y) * (points[2].x - points[1].x) - (p.x - points[1].x) * (points[2].y - points[1].y)) /
+		((points[0].y - points[1].y) * (points[2].x - points[0].x) - (points[0].x - points[1].x) * (points[2].y - points[0].y));
+	float v = (float)((p.y - points[2].y) * (points[0].x - points[2].x) - (p.x - points[2].x) * (points[0].y - points[2].y)) /
+		((points[0].x - points[2].x) * (points[1].y - points[2].y) - (points[0].y - points[2].y) * (points[1].x - points[2].x));
+	return Vec3f(u, v, (1 - u - v));
 }
 
+//根据重心坐标插值，得到目标点的光照大小
 float Gouraud(float* intensity, Vec3f bc)
 {
 	return intensity[0] * bc.x + intensity[1] * bc.y + intensity[2] * bc.z;
@@ -265,59 +266,24 @@ void triangle(Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& 
 	{
 		for (int y = bboxMin.y; y <= bboxMax.y; y++)
 		{
-			Vec3f bc = barycentric(points, Vec2i(x, y));
+			Vec3f bc = barycentric(points, Vec2i(x, y)); //这里传入重心坐标计算公式的p点是个二维值
 			if (bc.x < 0 || bc.y < 0 || bc.z < 0) //得到的重心值不在0 1范围内，所以不在三角形内
 				continue;
+			//根据重心坐标插值，得到点对应的uv值
 			Vec2i pixelUV = uv[0] * bc.x + uv[1] * bc.y + uv[2] * bc.z;
 			//根据重心坐标三个分量，求点的z值
-			float z = points[0].z * bc.x + points[0].z * bc.y + points[0].z * bc.z;
-			Vec3f bcPoint = points[0] * bc.x + points[1] * bc.y + points[2] * bc.z;
-			if (zbuffer[x][y] < bcPoint.z)
+			float z = points[0].z * bc.x + points[1].z * bc.y + points[2].z * bc.z;
+			if (zbuffer[x][y] < z)
 			{
-				zbuffer[x][y] = bcPoint.z;
+				zbuffer[x][y] = z;
 				TGAColor color = model->getTextureColor(pixelUV);
 
 				float gouraud = Gouraud(intensity, bc);
-				//image.set(x, y, TGAColor(color.bgra[2], color.bgra[1], color.bgra[0]) * gouraud);
-				image.set(x, y, TGAColor(255, 255, 255) * gouraud);
+				image.set(x, y, TGAColor(color.bgra[2], color.bgra[1], color.bgra[0]) * gouraud);
 			}
 		}
 	}
 }
-
-//求三角形三个点的重心值分量，然后计算出点真实的intensity值
-void triangle2(Vec3i t0, Vec3i t1, Vec3i t2, float ity0, float ity1, float ity2, TGAImage& image, vector<vector<int>>& zbuffer) {
-	if (t0.y == t1.y && t0.y == t2.y) return; // i dont care about degenerate triangles
-	if (t0.y > t1.y) { std::swap(t0, t1); std::swap(ity0, ity1); }
-	if (t0.y > t2.y) { std::swap(t0, t2); std::swap(ity0, ity2); }
-	if (t1.y > t2.y) { std::swap(t1, t2); std::swap(ity1, ity2); }
-
-	int total_height = t2.y - t0.y;
-	for (int i = 0; i < total_height; i++) {
-		bool second_half = i > t1.y - t0.y || t1.y == t0.y;
-		int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y;
-		float alpha = (float)i / total_height;
-		float beta = (float)(i - (second_half ? t1.y - t0.y : 0)) / segment_height; // be careful: with above conditions no division by zero here
-		Vec3i A = t0 + Vec3f(t2 - t0) * alpha;
-		Vec3i B = second_half ? t1 + Vec3f(t2 - t1) * beta : t0 + Vec3f(t1 - t0) * beta;
-		float ityA = ity0 + (ity2 - ity0) * alpha;
-		float ityB = second_half ? ity1 + (ity2 - ity1) * beta : ity0 + (ity1 - ity0) * beta;
-		if (A.x > B.x) { std::swap(A, B); std::swap(ityA, ityB); }
-		for (int j = A.x; j <= B.x; j++) {
-			float phi = B.x == A.x ? 1. : (float)(j - A.x) / (B.x - A.x);
-			Vec3i    P = Vec3f(A) + Vec3f(B - A) * phi;
-			float ityP = ityA + (ityB - ityA) * phi;
-			int idx = P.x + P.y * width;
-			if (P.x >= width || P.y >= height || P.x < 0 || P.y < 0) continue;
-			if (zbuffer[P.x][P.y] < P.z) {
-				cout << P.z << endl;
-				zbuffer[P.x][P.y] = P.z;
-				image.set(P.x, P.y, TGAColor(255, 255, 255) * ityP);
-			}
-		}
-	}
-}
-
 
 Matrix lookAt(Vec3f camera, Vec3f center, Vec3f up)
 {
@@ -341,11 +307,6 @@ Matrix lookAt(Vec3f camera, Vec3f center, Vec3f up)
 
 int main()
 {
-	int* zbuffer1 = new int[width * height];
-	for (int i = 0; i < width * height; i++) {
-		zbuffer1[i] = std::numeric_limits<int>::min();
-	}
-
 	TGAImage image(width, height, TGAImage::RGB);
 
 	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN)); //坐标是右手系，所以z轴是垂直屏幕向外的
@@ -377,22 +338,21 @@ int main()
 		}
 		Vec3i points[3] = { screen[0], screen[1], screen[2] };
 		triangle(points, uv, zbuffer, image, intensity);
-		//triangle2(screen[0], screen[1], screen[2], intensity[0], intensity[1], intensity[2], image, zbuffer);
 	}
 
 	image.flip_vertically();
 	image.write_tga_file("output.tga");
 
+	//输出深度值
 	TGAImage zbimage(width, height, TGAImage::GRAYSCALE);
 	for (int i = 0; i < width; i++)
 	{
 		for (int t = 0; t < height; t++)
 		{
 			zbimage.set(i, t, TGAColor(zbuffer[i][t]));
-			//zbimage.set(i, t, TGAColor(zbuffer1[i + t * width]));
 		}
 	}
-	zbimage.flip_vertically(); // i want to have the origin at the left bottom corner of the image
+	zbimage.flip_vertically();
 	zbimage.write_tga_file("zbuffer.tga");
 
 	return 0;

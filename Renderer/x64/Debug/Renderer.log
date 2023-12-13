@@ -8,45 +8,19 @@ E:\vs c++ practice\renderer\Renderer\mainRender.cpp(100,13): warning C4244: “�
 E:\vs c++ practice\renderer\Renderer\mainRender.cpp(102,9): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
 E:\vs c++ practice\renderer\Renderer\mainRender.cpp(181,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
 E:\vs c++ practice\renderer\Renderer\mainRender.cpp(182,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(271,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(278,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
           with
           [
               _Ty=int
           ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(371,67): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-          and
-          [
-              t=int
-          ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(371,51): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-          and
-          [
-              t=int
-          ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(371,35): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-          and
-          [
-              t=int
-          ]
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(330,9): warning C4101: “distance”: 未引用的局部变量
 E:\vs c++ practice\renderer\Renderer\geometry.h(15,74): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
           with
           [
               t=int
           ]
 E:\vs c++ practice\renderer\Renderer\geometry.h(15,13): message : 在编译 类 模板 成员函数“Vec2<int> Vec2<int>::operator *(float) const”时
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(266,48): message : 请参阅 "triangle" 中对 "Vec2<int>::operator *" 的第一个引用
+E:\vs c++ practice\renderer\Renderer\mainRender.cpp(273,48): message : 请参阅 "triangle" 中对 "Vec2<int>::operator *" 的第一个引用
 E:\vs c++ practice\renderer\Renderer\mainRender.cpp(168,6): message : 查看对正在编译的 类 模板 实例化“Vec2<int>”的引用
 E:\vs c++ practice\renderer\Renderer\geometry.h(15,67): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
           with
