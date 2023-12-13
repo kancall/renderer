@@ -21,7 +21,7 @@ const int depth = 255;
 Vec3f camera(2, 1, 4);
 Vec3f center(0, 0, 0);
 Vec3f up(0, 1, 0);
-Vec3f lightDir(0, 0, -1);
+Vec3f lightDir = Vec3f(1, -1, 3).normalize();
 
 Model* model = nullptr;
 
@@ -242,7 +242,12 @@ Vec3f barycentric(Vec3i* points, Vec2i p)
 	return Vec3f((1 - u - v), u, v);
 }
 
-void triangle(Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image, float intensity)
+float Gouraud(float* intensity, Vec3f bc)
+{
+	return intensity[0] * bc.x + intensity[1] * bc.y + intensity[2] * bc.z;
+}
+
+void triangle(Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image, float* intensity)
 {
 	Vec2i bboxMax = Vec2i(0, 0), bboxMin = Vec2i(image.get_width() - 1, image.get_height() - 1);
 
@@ -266,15 +271,53 @@ void triangle(Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& 
 			Vec2i pixelUV = uv[0] * bc.x + uv[1] * bc.y + uv[2] * bc.z;
 			//根据重心坐标三个分量，求点的z值
 			float z = points[0].z * bc.x + points[0].z * bc.y + points[0].z * bc.z;
-			if (zbuffer[x][y] < z)
+			Vec3f bcPoint = points[0] * bc.x + points[1] * bc.y + points[2] * bc.z;
+			if (zbuffer[x][y] < bcPoint.z)
 			{
-				zbuffer[x][y] = z;
+				zbuffer[x][y] = bcPoint.z;
 				TGAColor color = model->getTextureColor(pixelUV);
-				image.set(x, y, TGAColor(color.bgra[2], color.bgra[1], color.bgra[0]) * intensity);
+
+				float gouraud = Gouraud(intensity, bc);
+				//image.set(x, y, TGAColor(color.bgra[2], color.bgra[1], color.bgra[0]) * gouraud);
+				image.set(x, y, TGAColor(255, 255, 255) * gouraud);
 			}
 		}
 	}
 }
+
+//求三角形三个点的重心值分量，然后计算出点真实的intensity值
+void triangle2(Vec3i t0, Vec3i t1, Vec3i t2, float ity0, float ity1, float ity2, TGAImage& image, vector<vector<int>>& zbuffer) {
+	if (t0.y == t1.y && t0.y == t2.y) return; // i dont care about degenerate triangles
+	if (t0.y > t1.y) { std::swap(t0, t1); std::swap(ity0, ity1); }
+	if (t0.y > t2.y) { std::swap(t0, t2); std::swap(ity0, ity2); }
+	if (t1.y > t2.y) { std::swap(t1, t2); std::swap(ity1, ity2); }
+
+	int total_height = t2.y - t0.y;
+	for (int i = 0; i < total_height; i++) {
+		bool second_half = i > t1.y - t0.y || t1.y == t0.y;
+		int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y;
+		float alpha = (float)i / total_height;
+		float beta = (float)(i - (second_half ? t1.y - t0.y : 0)) / segment_height; // be careful: with above conditions no division by zero here
+		Vec3i A = t0 + Vec3f(t2 - t0) * alpha;
+		Vec3i B = second_half ? t1 + Vec3f(t2 - t1) * beta : t0 + Vec3f(t1 - t0) * beta;
+		float ityA = ity0 + (ity2 - ity0) * alpha;
+		float ityB = second_half ? ity1 + (ity2 - ity1) * beta : ity0 + (ity1 - ity0) * beta;
+		if (A.x > B.x) { std::swap(A, B); std::swap(ityA, ityB); }
+		for (int j = A.x; j <= B.x; j++) {
+			float phi = B.x == A.x ? 1. : (float)(j - A.x) / (B.x - A.x);
+			Vec3i    P = Vec3f(A) + Vec3f(B - A) * phi;
+			float ityP = ityA + (ityB - ityA) * phi;
+			int idx = P.x + P.y * width;
+			if (P.x >= width || P.y >= height || P.x < 0 || P.y < 0) continue;
+			if (zbuffer[P.x][P.y] < P.z) {
+				cout << P.z << endl;
+				zbuffer[P.x][P.y] = P.z;
+				image.set(P.x, P.y, TGAColor(255, 255, 255) * ityP);
+			}
+		}
+	}
+}
+
 
 Matrix lookAt(Vec3f camera, Vec3f center, Vec3f up)
 {
@@ -296,55 +339,13 @@ Matrix lookAt(Vec3f camera, Vec3f center, Vec3f up)
 	return Mr * Mt;
 }
 
-void scene()
-{
-	Model* model = new Model("obj/cube.obj");
-
-	TGAImage image(width, height, TGAImage::RGB);
-	Matrix VP = viewport(width / 4, width / 4, width / 2, height / 2);
-
-	{ // draw the axes
-		Vec3f x(1.f, 0.f, 0.f), y(0.f, 1.f, 0.f), o(0.f, 0.f, 0.f);
-		o = m2v(VP * v2m(o));
-		x = m2v(VP * v2m(x));
-		y = m2v(VP * v2m(y));
-		line(o, x, image, red);
-		line(o, y, image, green);
-	}
-
-
-	for (int i = 0; i < model->nfaces(); i++) {
-		std::vector<int> face = model->face(i);
-		for (int j = 0; j < (int)face.size(); j++) {
-			Vec3f wp0 = model->vert(face[j]);
-			Vec3f wp1 = model->vert(face[(j + 1) % face.size()]);
-
-			{ // draw the original model
-				Vec3f sp0 = m2v(VP * v2m(wp0));
-				Vec3f sp1 = m2v(VP * v2m(wp1));
-				line(sp0, sp1, image, white);
-			}
-			{ // draw the deformed model
-				Matrix T = zoom(1.5);
-				//                  Matrix T = Matrix::identity(4);
-				//                  T[0][1] = 0.333;
-				//                Matrix T = translation(Vec3f(.33, .5, 0))*rotation_z(cos(10.*M_PI/180.), sin(10.*M_PI/180.));
-				Vec3f sp0 = m2v(VP * T * v2m(wp0));
-				Vec3f sp1 = m2v(VP * T * v2m(wp1));
-				line(sp0, sp1, image, yellow);
-			}
-		}
-		break;
-	}
-
-
-	image.flip_vertically(); // i want to have the origin at the left bottom corner of the image
-	image.write_tga_file("output.tga");
-	delete model;
-}
-
 int main()
 {
+	int* zbuffer1 = new int[width * height];
+	for (int i = 0; i < width * height; i++) {
+		zbuffer1[i] = std::numeric_limits<int>::min();
+	}
+
 	TGAImage image(width, height, TGAImage::RGB);
 
 	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN)); //坐标是右手系，所以z轴是垂直屏幕向外的
@@ -364,25 +365,35 @@ int main()
 		Vec3i screen[3];
 		Vec3f world[3];
 		Vec2i uv[3];
+		float intensity[3]; //记录三角形三个点分别的光照强度，计算着色要用
+		float distance[3]; //记录三角形三个点分别到摄像机的距离，暂时用不到
 		for (int t = 0; t < 3; t++)
 		{
 			Vec3f v = model->vert(face[t]);
-			Vec3f screenFloat = m2v(Viewport * Projection * ModelView * v2m(v)); //这一步将我们模型的点转换到了屏幕上，仔细看会发现中间少了一步World Space到Camera Space的视角变换，其实是因为目前的场景里只有一个模型，所以就和ModelView合并了
-			screen[t] = Vec3i(screenFloat[0], screenFloat[1], screenFloat[2]); //geometry.cpp的vec3i和vec3f之间的转换出了点问题，所以先手动转一下
+			screen[t] = Vec3f(m2v(Viewport * Projection * ModelView * v2m(v))); //这一步将我们模型的点转换到了屏幕上，仔细看会发现中间少了一步World Space到Camera Space的视角变换，其实是因为目前的场景里只有一个模型，所以就和ModelView合并了
 			world[t] = v;
 			uv[t] = model->uv(i, t);
+			intensity[t] = dot(model->norm(i, t), lightDir);
 		}
-		Vec3f n = cross((world[2] - world[0]), (world[1] - world[0])); //叉乘三角形的边的向量求法向量
-		n.normalize();
-		float intensity = dot(n, lightDir); //用点乘表示两个向量之间的夹角大小，夹角越小越接近1，也说明光线越和平面垂直、平面越亮
-		if (intensity >= 0)
-		{
-			Vec3i points[3] = { screen[0], screen[1], screen[2] };
-			triangle(points, uv, zbuffer, image, intensity);
-		}
+		Vec3i points[3] = { screen[0], screen[1], screen[2] };
+		triangle(points, uv, zbuffer, image, intensity);
+		//triangle2(screen[0], screen[1], screen[2], intensity[0], intensity[1], intensity[2], image, zbuffer);
 	}
 
 	image.flip_vertically();
 	image.write_tga_file("output.tga");
+
+	TGAImage zbimage(width, height, TGAImage::GRAYSCALE);
+	for (int i = 0; i < width; i++)
+	{
+		for (int t = 0; t < height; t++)
+		{
+			zbimage.set(i, t, TGAColor(zbuffer[i][t]));
+			//zbimage.set(i, t, TGAColor(zbuffer1[i + t * width]));
+		}
+	}
+	zbimage.flip_vertically(); // i want to have the origin at the left bottom corner of the image
+	zbimage.write_tga_file("zbuffer.tga");
+
 	return 0;
 }

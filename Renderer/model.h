@@ -9,7 +9,7 @@ class Model {
 private:
 	std::vector<Vec3f> verts_; //存放所有的顶点坐标
 	std::vector<std::vector<Vec3i> > faces_; //存储该面三个点对应顶点坐标 纹理坐标 法向量 的索引
-	std::vector<Vec3f> norms_;
+	std::vector<Vec3f> norms_; //记录的是每个顶点的法线信息
 	std::vector<Vec2f> uv_; //存储模型的纹理坐标
 	TGAImage textureMap_; //存放纹理贴图
 	void load_texture(std::string filename, const char* suffix, TGAImage& image);
