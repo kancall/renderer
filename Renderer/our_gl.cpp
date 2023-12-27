@@ -1,30 +1,12 @@
-ï»¿#include "tgaimage.h"
-#include<iostream>
-#include "model.h"
-#include"geometry.h"
-#include<vector>
-#define _USE_MATH_DEFINES
-#include<math.h>
-#include "our_gl.h"
+#ifndef __OUR_GL_H__
+#define __OUR_GL_H__
 
+#include "tgaimage.h"
+#include "model.h"
 using namespace std;
 
-TGAColor white(255, 255, 255, 255);
-TGAColor red(255, 0, 0, 255);
-TGAColor green(0, 255, 0, 255);
-TGAColor blue(0, 0, 255, 255);
-TGAColor yellow = TGAColor(255, 255, 0, 255);
-
-const int width = 800;
-const int height = 800;
 const int depth = 255;
-
-Vec3f camera(2, 1, 4);
-Vec3f center(0, 0, 0);
-Vec3f up(0, 1, 0);
-Vec3f lightDir = Vec3f(1, -1, 1).normalize();
-
-Model* model = nullptr;
+Model* model = NULL;
 
 float dot(Vec3f a, Vec3f b)
 {
@@ -36,12 +18,12 @@ Vec3f cross(Vec3f a, Vec3f b)
 	return Vec3f(a.y * b.z - b.y * a.z, -a.x * b.z + b.x * a.z, a.x * b.y - b.x * a.y);
 }
 
-//å°†çŸ©é˜µï¼ˆmatrixï¼‰å˜æ¢æˆå‘é‡ï¼ˆvertorï¼‰ï¼Œå’Œv2mæ˜¯é€†æ“ä½œ
+//½«¾ØÕó£¨matrix£©±ä»»³ÉÏòÁ¿£¨vertor£©£¬ºÍv2mÊÇÄæ²Ù×÷
 Vec3f m2v(Matrix m) {
 	return Vec3f(m[0][0] / m[3][0], m[1][0] / m[3][0], m[2][0] / m[3][0]);
 }
 
-//å°†å‘é‡ï¼ˆvertorï¼‰å˜æ¢æˆçŸ©é˜µï¼ˆmatrixï¼‰ï¼Œè¿™ä¸ªçŸ©é˜µæ˜¯é½æ¬¡åæ ‡
+//½«ÏòÁ¿£¨vertor£©±ä»»³É¾ØÕó£¨matrix£©£¬Õâ¸ö¾ØÕóÊÇÆë´Î×ø±ê
 Matrix v2m(Vec3f v) {
 	Matrix m(4, 1);
 	m[0][0] = v.x;
@@ -51,7 +33,7 @@ Matrix v2m(Vec3f v) {
 	return m;
 }
 
-//ViewPort Transformationï¼Œå°†åæ ‡ä»ã€-1ï¼Œ1ã€‘çš„èŒƒå›´æ˜ å°„åˆ°å±å¹•è¾“å‡ºçš„èŒƒå›´ä¸­
+//ViewPort Transformation£¬½«×ø±ê´Ó¡¾-1£¬1¡¿µÄ·¶Î§Ó³Éäµ½ÆÁÄ»Êä³öµÄ·¶Î§ÖĞ
 Matrix viewport(int x, int y, int w, int h) {
 	Matrix m = Matrix::identity(4);
 	m[0][3] = x + w / 2.f;
@@ -72,7 +54,7 @@ Matrix translation(Vec3f v) {
 	return Tr;
 }
 
-//ç»•zè½´æ—‹è½¬
+//ÈÆzÖáĞı×ª
 Matrix rotation_z(float cosangle, float sinangle) {
 	Matrix R = Matrix::identity(4);
 	R[0][0] = R[1][1] = cosangle;
@@ -114,7 +96,7 @@ void line(Vec3f p0, Vec3f p1, TGAImage& image, TGAColor color) {
 //{
 //	int x0 = a.x, y0 = a.y, x1 = b.x, y1 = b.y;
 //	bool steep = false;
-//	//æŠŠé•¿çš„é‚£æ¡è¾¹æ”¾åœ¨yè½´ä¸Š
+//	//°Ñ³¤µÄÄÇÌõ±ß·ÅÔÚyÖáÉÏ
 //	if (abs(x0 - x1) > abs(y0 - y1))
 //	{
 //		swap(x0, y0);
@@ -132,7 +114,7 @@ void line(Vec3f p0, Vec3f p1, TGAImage& image, TGAColor color) {
 //
 //	float rate = abs(dx / float(dy));
 //	float pix = 0;
-//	//ä¸ç”¨floatå’Œé™¤æ³•çš„æ–¹æ³•ï¼š
+//	//²»ÓÃfloatºÍ³ı·¨µÄ·½·¨£º
 //	int rate2 = abs(dx) * 2;
 //	int pix2 = 0;
 //	while (t <= y1)
@@ -143,12 +125,12 @@ void line(Vec3f p0, Vec3f p1, TGAImage& image, TGAColor color) {
 //			image.set(i, t, color);
 //		t++;
 //
-//		//æ—§æ–¹æ³•ï¼šæœ‰é‡å¤çš„è®¡ç®—ï¼Œæ•ˆç‡ä½
-//		//tåœ¨yè½´èµ°çš„ç™¾åˆ†æ¯”ï¼Œä¹˜ä¸Šxè½´çš„é•¿åº¦ï¼Œå°±æ˜¯åç§»å€¼
+//		//¾É·½·¨£ºÓĞÖØ¸´µÄ¼ÆËã£¬Ğ§ÂÊµÍ
+//		//tÔÚyÖá×ßµÄ°Ù·Ö±È£¬³ËÉÏxÖáµÄ³¤¶È£¬¾ÍÊÇÆ«ÒÆÖµ
 //		//i = (x1 - x0)*(t - y0) / (y1 - y0) + x0;
-//		//æˆ–è€…i = (t - y0) / (float)(y1 - y0) * (x1 - x0) + x0;è¦åŠ floatï¼Œä¸ç„¶è®¡ç®—å‡ºæ¥å‰é¢é™¤æ³•ä¸€ç›´æ˜¯0
+//		//»òÕßi = (t - y0) / (float)(y1 - y0) * (x1 - x0) + x0;Òª¼Ófloat£¬²»È»¼ÆËã³öÀ´Ç°Ãæ³ı·¨Ò»Ö±ÊÇ0
 //
-//		//æ–°æ–¹æ³•ï¼šå‡å°‘é‡å¤è®¡ç®—ã€‚åˆ¤æ–­æ–œç‡æ˜¯å¦è¿›ä½ï¼Œè¿›ä½å°±å°†xè½´ç§»åŠ¨ä¸€ä½
+//		//ĞÂ·½·¨£º¼õÉÙÖØ¸´¼ÆËã¡£ÅĞ¶ÏĞ±ÂÊÊÇ·ñ½øÎ»£¬½øÎ»¾Í½«xÖáÒÆ¶¯Ò»Î»
 //		/*pix += rate;
 //		if (pix > .5)
 //		{
@@ -156,9 +138,9 @@ void line(Vec3f p0, Vec3f p1, TGAImage& image, TGAColor color) {
 //			pix -= 1;
 //		}*/
 //
-//		//æ›´æ–°çš„æ–¹æ³•ï¼šå»æ‰é™¤æ³•ï¼Œç›´æ¥ç”¨dxã€dyè¿›è¡Œæ¯”è¾ƒï¼Œæ•ˆç‡æ›´é«˜ã€‚å…¶å®ç›¸å½“äºä¸Šä¸€ä¸ªæ–¹æ³•å˜é‡é›†ä½“ä¹˜2å€dy
+//		//¸üĞÂµÄ·½·¨£ºÈ¥µô³ı·¨£¬Ö±½ÓÓÃdx¡¢dy½øĞĞ±È½Ï£¬Ğ§ÂÊ¸ü¸ß¡£ÆäÊµÏàµ±ÓÚÉÏÒ»¸ö·½·¨±äÁ¿¼¯Ìå³Ë2±¶dy
 //		pix2 += rate2;
-//		if (pix2 > dx && dx != 0)//åé¢è¿™ä¸ªåˆ¤æ–­ç”¨æ¥å¤„ç†æ°´å¹³ã€å‚ç›´çº¿çš„æ–œç‡æƒ…å†µ
+//		if (pix2 > dx && dx != 0)//ºóÃæÕâ¸öÅĞ¶ÏÓÃÀ´´¦ÀíË®Æ½¡¢´¹Ö±ÏßµÄĞ±ÂÊÇé¿ö
 //		{
 //			i += (x1 > x0 ? 1 : -1);
 //			pix2 -= dy * 2;
@@ -188,8 +170,8 @@ void triangle1(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage& image, TGAColor color)
 			image.set(i, y, color);
 		}
 	}
-	//ä¸‹åŠéƒ¨åˆ†ä¸‰è§’
-	/*int midHeight = t1.y - t2.y + 1; //ä¸‹é¢è¦é™¤ï¼Œé¿å…åˆ†æ¯æ˜¯0
+	//ÏÂ°ë²¿·ÖÈı½Ç
+	/*int midHeight = t1.y - t2.y + 1; //ÏÂÃæÒª³ı£¬±ÜÃâ·ÖÄ¸ÊÇ0
 	for (int y = t2.y; y <= t1.y; y++)
 	{
 		int nowHeight = y - t2.y;
@@ -204,7 +186,7 @@ void triangle1(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage& image, TGAColor color)
 			image.set(i, y, color);
 		}
 	}
-	//ä¸ŠåŠéƒ¨åˆ†
+	//ÉÏ°ë²¿·Ö
 	midHeight = t0.y - t1.y + 1;
 	for (int y = t1.y; y <= t0.y; y++)
 	{
@@ -222,20 +204,20 @@ void triangle1(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage& image, TGAColor color)
 }
 
 /// <summary>
-/// è®¡ç®—è¯¥ç‚¹åœ¨ä¸‰è§’å½¢ä¸­çš„é‡å¿ƒåæ ‡
+/// ¼ÆËã¸ÃµãÔÚÈı½ÇĞÎÖĞµÄÖØĞÄ×ø±ê
 /// </summary>
 /// <param name="points"></param>
 /// <param name="p"></param>
 /// <returns></returns>
 Vec3f barycentric(Vec3i* points, Vec2i p)
 {
-	//æ±‚å‡ºæ¥è¿™ä¸ªç‚¹åœ¨ä¸‰è§’å½¢ä¸­å¯¹åº”çš„u vå€¼ï¼Œç„¶ååˆ¤æ–­u vå€¼åœ¨ä¸åœ¨0 1èŒƒå›´å†…
+	//Çó³öÀ´Õâ¸öµãÔÚÈı½ÇĞÎÖĞ¶ÔÓ¦µÄu vÖµ£¬È»ºóÅĞ¶Ïu vÖµÔÚ²»ÔÚ0 1·¶Î§ÄÚ
 	/*Vec3f uv = Vec3f(points[2].x - points[0].x, points[1].x - points[0].x, points[0].x - p.x) ^
 		Vec3f(points[2].y - points[0].y, points[1].y - points[0].y, points[0].y - p.y);
 	if (abs(uv.z < 1)) return Vec3f(-1, 1, 1);
 	return Vec3f(1.f - (uv.x + uv.y) / uv.z, uv.y / uv.z, uv.x / uv.z);*/
 
-	//æ ¹æ®games101 p9 16åˆ†12çš„å…¬å¼ç®—çš„
+	//¸ù¾İgames101 p9 16·Ö12µÄ¹«Ê½ËãµÄ
 	float u = (float)((p.y - points[1].y) * (points[2].x - points[1].x) - (p.x - points[1].x) * (points[2].y - points[1].y)) /
 		((points[0].y - points[1].y) * (points[2].x - points[0].x) - (points[0].x - points[1].x) * (points[2].y - points[0].y));
 	float v = (float)((p.y - points[2].y) * (points[0].x - points[2].x) - (p.x - points[2].x) * (points[0].y - points[2].y)) /
@@ -243,7 +225,7 @@ Vec3f barycentric(Vec3i* points, Vec2i p)
 	return Vec3f(u, v, (1 - u - v));
 }
 
-//æ ¹æ®é‡å¿ƒåæ ‡æ’å€¼ï¼Œå¾—åˆ°ç›®æ ‡ç‚¹çš„å…‰ç…§å¤§å°
+//¸ù¾İÖØĞÄ×ø±ê²åÖµ£¬µÃµ½Ä¿±êµãµÄ¹âÕÕ´óĞ¡
 float Gouraud(float* intensity, Vec3f bc)
 {
 	return intensity[0] * bc.x + intensity[1] * bc.y + intensity[2] * bc.z;
@@ -255,7 +237,7 @@ void triangle(Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& 
 
 	for (int i = 0; i < 3; i++)
 	{
-		//å¤–é¢é‚£å±‚å¤§å°æ¯”è¾ƒæ˜¯çœ‹çœ‹è¶…å‡ºè¾¹ç•Œæ²¡
+		//ÍâÃæÄÇ²ã´óĞ¡±È½ÏÊÇ¿´¿´³¬³ö±ß½çÃ»
 		bboxMin.x = max(0, min(bboxMin.x, points[i].x));
 		bboxMin.y = max(0, min(bboxMin.y, points[i].y));
 
@@ -267,12 +249,12 @@ void triangle(Vec3i* points, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& 
 	{
 		for (int y = bboxMin.y; y <= bboxMax.y; y++)
 		{
-			Vec3f bc = barycentric(points, Vec2i(x, y)); //è¿™é‡Œä¼ å…¥é‡å¿ƒåæ ‡è®¡ç®—å…¬å¼çš„pç‚¹æ˜¯ä¸ªäºŒç»´å€¼
-			if (bc.x < 0 || bc.y < 0 || bc.z < 0) //å¾—åˆ°çš„é‡å¿ƒå€¼ä¸åœ¨0 1èŒƒå›´å†…ï¼Œæ‰€ä»¥ä¸åœ¨ä¸‰è§’å½¢å†…
+			Vec3f bc = barycentric(points, Vec2i(x, y)); //ÕâÀï´«ÈëÖØĞÄ×ø±ê¼ÆËã¹«Ê½µÄpµãÊÇ¸ö¶şÎ¬Öµ
+			if (bc.x < 0 || bc.y < 0 || bc.z < 0) //µÃµ½µÄÖØĞÄÖµ²»ÔÚ0 1·¶Î§ÄÚ£¬ËùÒÔ²»ÔÚÈı½ÇĞÎÄÚ
 				continue;
-			//æ ¹æ®é‡å¿ƒåæ ‡æ’å€¼ï¼Œå¾—åˆ°ç‚¹å¯¹åº”çš„uvå€¼
+			//¸ù¾İÖØĞÄ×ø±ê²åÖµ£¬µÃµ½µã¶ÔÓ¦µÄuvÖµ
 			Vec2i pixelUV = uv[0] * bc.x + uv[1] * bc.y + uv[2] * bc.z;
-			//æ ¹æ®é‡å¿ƒåæ ‡ä¸‰ä¸ªåˆ†é‡ï¼Œæ±‚ç‚¹çš„zå€¼
+			//¸ù¾İÖØĞÄ×ø±êÈı¸ö·ÖÁ¿£¬ÇóµãµÄzÖµ
 			float z = points[0].z * bc.x + points[1].z * bc.y + points[2].z * bc.z;
 			if (zbuffer[x][y] < z)
 			{
@@ -296,9 +278,9 @@ Matrix lookAt(Vec3f camera, Vec3f center, Vec3f up)
 	Matrix Mt = Matrix::identity(4);
 	for (int i = 0; i < 3; i++)
 	{
-		//å¹³ç§»çŸ©é˜µ
+		//Æ½ÒÆ¾ØÕó
 		Mt[i][3] = -center[i];
-		//æ—‹è½¬çŸ©é˜µ
+		//Ğı×ª¾ØÕó
 		Mr[0][i] = x[i];
 		Mr[1][i] = y[i];
 		Mr[2][i] = z[i];
@@ -306,55 +288,4 @@ Matrix lookAt(Vec3f camera, Vec3f center, Vec3f up)
 	return Mr * Mt;
 }
 
-int main()
-{
-	TGAImage image(width, height, TGAImage::RGB);
-
-	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN)); //åæ ‡æ˜¯å³æ‰‹ç³»ï¼Œæ‰€ä»¥zè½´æ˜¯å‚ç›´å±å¹•å‘å¤–çš„
-	model = new Model("obj/african_head.obj");
-
-	//é€è§†çŸ©é˜µ
-	Matrix Projection = Matrix::identity(4);
-	Projection[3][2] = -1.f / (camera - center).norm();
-	//è§†å£çŸ©é˜µ
-	Matrix Viewport = viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
-	//æ¨¡å‹çŸ©é˜µ
-	Matrix ModelView = lookAt(camera, center, up);
-
-	for (int i = 0; i < model->nfaces(); i++)
-	{
-		vector<int> face = model->face(i);
-		Vec3i screen[3];
-		Vec3f world[3];
-		Vec2i uv[3];
-		float intensity[3]; //è®°å½•ä¸‰è§’å½¢ä¸‰ä¸ªç‚¹åˆ†åˆ«çš„å…‰ç…§å¼ºåº¦ï¼Œè®¡ç®—ç€è‰²è¦ç”¨
-		float distance[3]; //è®°å½•ä¸‰è§’å½¢ä¸‰ä¸ªç‚¹åˆ†åˆ«åˆ°æ‘„åƒæœºçš„è·ç¦»ï¼Œæš‚æ—¶ç”¨ä¸åˆ°
-		for (int t = 0; t < 3; t++)
-		{
-			Vec3f v = model->vert(face[t]);
-			screen[t] = Vec3f(m2v(Viewport * Projection * ModelView * v2m(v))); //è¿™ä¸€æ­¥å°†æˆ‘ä»¬æ¨¡å‹çš„ç‚¹è½¬æ¢åˆ°äº†å±å¹•ä¸Šï¼Œä»”ç»†çœ‹ä¼šå‘ç°ä¸­é—´å°‘äº†ä¸€æ­¥World Spaceåˆ°Camera Spaceçš„è§†è§’å˜æ¢ï¼Œå…¶å®æ˜¯å› ä¸ºç›®å‰çš„åœºæ™¯é‡Œåªæœ‰ä¸€ä¸ªæ¨¡å‹ï¼Œæ‰€ä»¥å°±å’ŒModelViewåˆå¹¶äº†
-			world[t] = v;
-			uv[t] = model->uv(i, t);
-			intensity[t] = dot(model->norm(i, t), lightDir);
-		}
-		Vec3i points[3] = { screen[0], screen[1], screen[2] };
-		triangle(points, uv, zbuffer, image, intensity);
-	}
-
-	image.flip_vertically();
-	image.write_tga_file("output.tga");
-
-	//è¾“å‡ºæ·±åº¦å€¼
-	TGAImage zbimage(width, height, TGAImage::GRAYSCALE);
-	for (int i = 0; i < width; i++)
-	{
-		for (int t = 0; t < height; t++)
-		{
-			zbimage.set(i, t, TGAColor(zbuffer[i][t]));
-		}
-	}
-	zbimage.flip_vertically();
-	zbimage.write_tga_file("zbuffer.tga");
-
-	return 0;
-}
+#endif // !_OUT_GL_H

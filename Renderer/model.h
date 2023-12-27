@@ -20,6 +20,7 @@ public:
 	int nfaces(); //面数
 	Vec3f norm(int iface, int nvert);
 	Vec3f vert(int i); //获取索引为i的顶点
+	Vec3f vert(int iface, int nthvert);
 	Vec2i uv(int nface, int nvert); //获取第nface面，面里第nvert个对应在纹理图上的uv值
 	std::vector<int> face(int idx); //根据面索引获取这个面所有顶点对应在verts里的下标
 	TGAColor getTextureColor(Vec2i uv);
