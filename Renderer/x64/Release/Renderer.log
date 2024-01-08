@@ -1,46 +1,65 @@
-﻿  mainRender.cpp
-D:\Renderer\Renderer\tgaimage.h(58,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
-  (编译源文件“mainRender.cpp”)
+﻿  main.cpp
+D:\Renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+  (编译源文件“main.cpp”)
   
-D:\Renderer\Renderer\mainRender.cpp(101,13): warning C4244: “初始化”: 从“t”转换到“int”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(101,13): warning C4244:         with
-D:\Renderer\Renderer\mainRender.cpp(101,13): warning C4244:         [
-D:\Renderer\Renderer\mainRender.cpp(101,13): warning C4244:             t=float
-D:\Renderer\Renderer\mainRender.cpp(101,13): warning C4244:         ]
-D:\Renderer\Renderer\mainRender.cpp(103,9): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(182,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(183,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
-D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244:         with
-D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244:         [
-D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244:             _Ty=int
-D:\Renderer\Renderer\mainRender.cpp(279,21): warning C4244:         ]
-D:\Renderer\Renderer\mainRender.cpp(331,9): warning C4101: “distance”: 未引用的局部变量
-D:\Renderer\Renderer\geometry.h(15,74): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
-D:\Renderer\Renderer\geometry.h(15,74): warning C4244:         with
-D:\Renderer\Renderer\geometry.h(15,74): warning C4244:         [
-D:\Renderer\Renderer\geometry.h(15,74): warning C4244:             t=int
-D:\Renderer\Renderer\geometry.h(15,74): warning C4244:         ]
-  (编译源文件“mainRender.cpp”)
-  D:\Renderer\Renderer\geometry.h(15,74):
-  模板实例化上下文(最早的实例化上下文)为
-  	D:\Renderer\Renderer\mainRender.cpp(169,6):
-  	查看对正在编译的 类 模板 实例化“Vec2<int>”的引用
-  	D:\Renderer\Renderer\geometry.h(15,13):
-  	在编译 类 模板 成员函数“Vec2<int> Vec2<int>::operator *(float) const”时
-  		D:\Renderer\Renderer\mainRender.cpp(274,48):
-  		请参阅 "triangle" 中对 "Vec2<int>::operator *" 的第一个引用
-  
-D:\Renderer\Renderer\geometry.h(15,67): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
-D:\Renderer\Renderer\geometry.h(15,67): warning C4244:         with
-D:\Renderer\Renderer\geometry.h(15,67): warning C4244:         [
-D:\Renderer\Renderer\geometry.h(15,67): warning C4244:             t=int
-D:\Renderer\Renderer\geometry.h(15,67): warning C4244:         ]
-  (编译源文件“mainRender.cpp”)
-  
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         ]
   our_gl.cpp
+D:\Renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+  (编译源文件“our_gl.cpp”)
+  
+D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
+D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244:         with
+D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244:         [
+D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244:             _Ty=int
+D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244:         ]
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244: “*=”: 从“const U”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         with
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         [
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244:             U=float
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         ]
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         and
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         [
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244:             T=int
+D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         ]
+  (编译源文件“our_gl.cpp”)
+  D:\Renderer\Renderer\geometry.h(64,41):
+  模板实例化上下文(最早的实例化上下文)为
+  	D:\Renderer\Renderer\our_gl.cpp(79,26):
+  	查看对正在编译的函数 模板 实例化“vec<2,int> operator *<2,int,T>(vec<2,int>,const U &)”的引用
+          with
+          [
+              T=float,
+              U=float
+          ]
+  
   正在生成代码
-  0 of 708 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  0 of 602 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成

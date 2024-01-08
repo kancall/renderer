@@ -1,15 +1,29 @@
 #ifndef __OUR_GL_H__
 #define __OUR_GL_H__
 
-Matrix Projection;
-Matrix Viewport;
-Matrix ModelView;
+#include "tgaimage.h"
+#include "geometry.h"
+#include<vector>
+using namespace std;
+
+extern Matrix Projection;
+extern Matrix Viewport;
+extern Matrix ModelView;
+
+float dot(Vec3f a, Vec3f b);
+Vec3f cross(Vec3f a, Vec3f b);
+
+void projection(Vec3f camera, Vec3f center);
+void viewport(int x, int y, int w, int h);
+void lookAt(Vec3f camera, Vec3f center, Vec3f up);
 
 struct IShader 
 {
 	virtual ~IShader();
-	virtual Vec3f vertex();
-	virtual void fragment();
+	virtual Vec4f vertex(int iface, int nvert) = 0;
+	virtual void fragment(Vec3f bc, TGAColor& color) = 0;
 };
+
+void triangle(Vec3i* points, IShader& shader, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image);
 
 #endif // !__OUR_GL_H__
