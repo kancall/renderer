@@ -2,65 +2,36 @@
 D:\Renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
   (编译源文件“main.cpp”)
   
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         with
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244:             T=float
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         and
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244:             T=int
-D:\Renderer\Renderer\main.cpp(55,30): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         with
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244:             T=float
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         and
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244:             T=int
-D:\Renderer\Renderer\main.cpp(56,30): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         with
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244:             T=float
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         and
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244:             T=int
-D:\Renderer\Renderer\main.cpp(57,30): warning C4244:         ]
-  our_gl.cpp
-D:\Renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
-  (编译源文件“our_gl.cpp”)
-  
-D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
-D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244:         with
-D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244:         [
-D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244:             _Ty=int
-D:\Renderer\Renderer\our_gl.cpp(85,21): warning C4244:         ]
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244: “*=”: 从“const U”转换到“T”，可能丢失数据
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         with
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         [
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244:             U=float
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         ]
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         and
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         [
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244:             T=int
-D:\Renderer\Renderer\geometry.h(64,41): warning C4244:         ]
-  (编译源文件“our_gl.cpp”)
-  D:\Renderer\Renderer\geometry.h(64,41):
-  模板实例化上下文(最早的实例化上下文)为
-  	D:\Renderer\Renderer\our_gl.cpp(79,26):
-  	查看对正在编译的函数 模板 实例化“vec<2,int> operator *<2,int,T>(vec<2,int>,const U &)”的引用
-          with
-          [
-              T=float,
-              U=float
-          ]
-  
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(65,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         ]
   正在生成代码
-  0 of 602 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  81 of 602 functions (13.5%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   Renderer.vcxproj -> D:\Renderer\x64\Release\Renderer.exe

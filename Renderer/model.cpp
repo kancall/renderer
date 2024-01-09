@@ -47,7 +47,7 @@ Model::Model(const char *filename) : verts_(), faces_(), norms_(), uv_() {
         }
     }
     std::cerr << "# v# " << verts_.size() << " f# " << faces_.size() << " vt# " << uv_.size() << std::endl;
-    load_texture(filename, "_diffuse.tga", textureMap_);
+    load_texture(filename, "_diffuse.tga", diffusemap_);
 }
 
 Model::~Model() {
@@ -83,18 +83,17 @@ void Model::load_texture(std::string filename, const char* suffix, TGAImage& img
         std::cerr << "texture file " << texfile << " loading " << (img.read_tga_file(texfile.c_str()) ? "ok" : "failed") << std::endl;
         img.flip_vertically();
     }
-    //img.read_tga_file("african_head_diffuse.tga");
 }
 
-TGAColor Model::getTextureColor(Vec2i uv)
+TGAColor Model::diffuse(Vec2i uv)
 {
-    return textureMap_.get(uv.x,  uv.y);
+    return diffusemap_.get(uv.x,  uv.y);
 }
 
 Vec2i Model::uv(int nface, int nvert)
 {
     int id = faces_[nface][nvert][1];
-    return Vec2i(uv_[id].x * textureMap_.get_width(), uv_[id].y * textureMap_.get_height());
+    return Vec2i(uv_[id].x * diffusemap_.get_width(), uv_[id].y * diffusemap_.get_height());
 }
 
 Vec3f Model::norm(int iface, int nvert) {

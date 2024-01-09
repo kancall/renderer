@@ -20,6 +20,28 @@ Vec3f cross(Vec3f a, Vec3f b)
 	return Vec3f(a.y * b.z - b.y * a.z, -a.x * b.z + b.x * a.z, a.x * b.y - b.x * a.y);
 }
 
+void lookAt(Vec3f camera, Vec3f center, Vec3f up)
+{
+	Vec3f z = (camera - center).normalize();
+	Vec3f x = cross(up, z).normalize();
+	Vec3f y = cross(z, x).normalize();
+
+	Matrix Mr = Matrix::identity();
+	Matrix Mt = Matrix::identity();
+	ModelView = Matrix::identity();
+
+	for (int i = 0; i < 3; i++)
+	{
+		//Æ½ÒÆ¾ØÕó
+		Mt[i][3] = -center[i];
+		//Ðý×ª¾ØÕó
+		Mr[0][i] = x[i];
+		Mr[1][i] = y[i];
+		Mr[2][i] = z[i];
+	}
+	ModelView = Mr * Mt;
+}
+
 void projection(Vec3f camera, Vec3f center)
 {
 	Projection = Matrix::identity();
@@ -27,7 +49,8 @@ void projection(Vec3f camera, Vec3f center)
 }
 
 //ViewPort Transformation£¬½«×ø±ê´Ó¡¾-1£¬1¡¿µÄ·¶Î§Ó³Éäµ½ÆÁÄ»Êä³öµÄ·¶Î§ÖÐ
-void viewport(int x, int y, int w, int h) {
+void viewport(int x, int y, int w, int h) 
+{
 	Viewport = Matrix::identity();
 	Viewport[0][3] = x + w / 2.f;
 	Viewport[1][3] = y + h / 2.f;
@@ -83,31 +106,9 @@ void triangle(Vec3i* points, IShader& shader, Vec2i* uv, vector<vector<int>>& zb
 			if (zbuffer[x][y] < z)
 			{
 				zbuffer[x][y] = z;
-				shader.fragment(bc, color);
+				shader.fragment(bc, color, pixelUV);
 				image.set(x, y, color);
 			}
 		}
 	}
-}
-
-void lookAt(Vec3f camera, Vec3f center, Vec3f up)
-{
-	Vec3f z = (camera - center).normalize();
-	Vec3f x = cross(up, z).normalize();
-	Vec3f y = cross(z, x).normalize();
-
-	Matrix Mr = Matrix::identity();
-	Matrix Mt = Matrix::identity();
-	ModelView = Matrix::identity();
-
-	for (int i = 0; i < 3; i++)
-	{
-		//Æ½ÒÆ¾ØÕó
-		Mt[i][3] = -center[i];
-		//Ðý×ª¾ØÕó
-		Mr[0][i] = x[i];
-		Mr[1][i] = y[i];
-		Mr[2][i] = z[i];
-	}
-	ModelView =  Mr * Mt;
 }

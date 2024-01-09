@@ -1,9 +1,12 @@
-#include<iostream>
-#include"model.h"
-#include "our_gl.h"
+#include <vector>
+#include <iostream>
 #include <algorithm>
+#include "tgaimage.h"
+#include "model.h"
+#include "geometry.h"
+#include "our_gl.h"
 
-Vec3f camera(1, 1, 4);
+Vec3f camera(2, 1, 4);
 Vec3f center(0, 0, 0);
 Vec3f up(0, 1, 0);
 Vec3f lightDir = Vec3f(1, -1, 1).normalize();
@@ -19,17 +22,23 @@ struct GouraudShader :public IShader
 	{
 		intensity[nvert] = std::max(0.f, dot(model->norm(iface, nvert), lightDir));
 		Vec4f v = embed<4>(model->vert(iface, nvert));
-		return Viewport * Projection * ModelView * v;
+		Vec4f vertexs = Viewport * Projection * ModelView * v;
+
+		return vertexs;
 	}
-	virtual void fragment(Vec3f bc, TGAColor& color)
+	virtual void fragment(Vec3f bc, TGAColor& color, Vec2i uv)
 	{
-		float gouraud = intensity * bc;
-		color = TGAColor(255, 255, 255) * gouraud;
+		TGAColor diffuseColor = model->diffuse(uv); //得到纹理图的颜色值
+		float gouraud = intensity * bc; //根据光强得到gouraud着色的值
+		color = diffuseColor * gouraud;
 	}
 };
 
 int main()
 {
+	Vec4f v = Vec4f();
+	Vec4f temp = ModelView * v; //很奇怪啊，这乘法第一次乘出来的老是错的，我真搞不懂了
+
 	model = new Model("obj/african_head.obj");
 	TGAImage image(width, height, TGAImage::RGB);
 	TGAImage zbimage(width, height, TGAImage::GRAYSCALE);

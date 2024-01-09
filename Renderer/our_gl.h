@@ -21,7 +21,7 @@ struct IShader
 {
 	virtual ~IShader();
 	virtual Vec4f vertex(int iface, int nvert) = 0;
-	virtual void fragment(Vec3f bc, TGAColor& color) = 0;
+	virtual void fragment(Vec3f bc, TGAColor& color, Vec2i uv) = 0;
 };
 
 void triangle(Vec3i* points, IShader& shader, Vec2i* uv, vector<vector<int>>& zbuffer, TGAImage& image);
