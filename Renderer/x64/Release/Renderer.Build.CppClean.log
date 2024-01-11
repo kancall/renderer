@@ -4,10 +4,11 @@ d:\renderer\renderer\x64\release\our_gl.obj
 d:\renderer\renderer\x64\release\model.obj
 d:\renderer\renderer\x64\release\main.obj
 d:\renderer\renderer\x64\release\geometry.obj
+d:\renderer\renderer\x64\release\test.obj
 d:\renderer\x64\release\renderer.exe
+d:\renderer\renderer\x64\release\renderer.ipdb
 d:\renderer\x64\release\renderer.pdb
 d:\renderer\renderer\x64\release\renderer.iobj
-d:\renderer\renderer\x64\release\renderer.ipdb
 d:\renderer\renderer\x64\release\renderer.tlog\cl.command.1.tlog
 d:\renderer\renderer\x64\release\renderer.tlog\cl.items.tlog
 d:\renderer\renderer\x64\release\renderer.tlog\cl.read.1.tlog

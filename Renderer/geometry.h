@@ -4,6 +4,7 @@
 #include <vector>
 #include <cassert>
 #include <iostream>
+using namespace std;
 
 template<size_t DimCols, size_t DimRows, typename T> class mat;
 

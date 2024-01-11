@@ -1,30 +1,14 @@
-﻿  mainRender.cpp
-E:\vs c++ practice\renderer\Renderer\tgaimage.h(58,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(100,13): warning C4244: “初始化”: 从“t”转换到“int”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(102,9): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(181,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(182,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(278,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
-          with
-          [
-              _Ty=int
-          ]
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(330,9): warning C4101: “distance”: 未引用的局部变量
-E:\vs c++ practice\renderer\Renderer\geometry.h(15,74): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
-          with
-          [
-              t=int
-          ]
-E:\vs c++ practice\renderer\Renderer\geometry.h(15,13): message : 在编译 类 模板 成员函数“Vec2<int> Vec2<int>::operator *(float) const”时
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(273,48): message : 请参阅 "triangle" 中对 "Vec2<int>::operator *" 的第一个引用
-E:\vs c++ practice\renderer\Renderer\mainRender.cpp(168,6): message : 查看对正在编译的 类 模板 实例化“Vec2<int>”的引用
-E:\vs c++ practice\renderer\Renderer\geometry.h(15,67): warning C4244: “参数”: 从“float”转换到“t”，可能丢失数据
-          with
-          [
-              t=int
-          ]
-  Renderer.vcxproj -> E:\vs c++ practice\renderer\x64\Debug\Renderer.exe
+﻿  main.cpp
+D:\Renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+  (编译源文件“main.cpp”)
+  
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         ]
+  Renderer.vcxproj -> D:\Renderer\x64\Debug\Renderer.exe

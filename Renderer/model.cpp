@@ -48,6 +48,7 @@ Model::Model(const char *filename) : verts_(), faces_(), norms_(), uv_() {
     }
     std::cerr << "# v# " << verts_.size() << " f# " << faces_.size() << " vt# " << uv_.size() << std::endl;
     load_texture(filename, "_diffuse.tga", diffusemap_);
+    load_texture(filename, "_nm.tga", normalmap_);
 }
 
 Model::~Model() {
@@ -85,15 +86,32 @@ void Model::load_texture(std::string filename, const char* suffix, TGAImage& img
     }
 }
 
-TGAColor Model::diffuse(Vec2i uv)
+TGAColor Model::diffuse(Vec2f uv)
 {
+    //给uv重新赋一次值是为了适配要采样的那张纹理图
+    uv.x = uv.x * diffusemap_.get_width();
+    uv.y = uv.y * diffusemap_.get_height();
+
     return diffusemap_.get(uv.x,  uv.y);
 }
 
-Vec2i Model::uv(int nface, int nvert)
+Vec3f Model::normal(Vec2f uv)
+{
+    uv.x = uv.x * normalmap_.get_width();
+    uv.y = uv.y * normalmap_.get_height();
+    TGAColor color = normalmap_.get(uv.x, uv.y);
+    Vec3f res;
+    for (int i = 0; i < 3; i++)
+    {
+        res[2 - i] = float(color[i] * 3.f / 255.f - 1);
+    }
+    return res;
+}
+
+Vec2f Model::uv(int nface, int nvert)
 {
     int id = faces_[nface][nvert][1];
-    return Vec2i(uv_[id].x * diffusemap_.get_width(), uv_[id].y * diffusemap_.get_height());
+    return Vec2f(uv_[id].x, uv_[id].y);
 }
 
 Vec3f Model::norm(int iface, int nvert) {

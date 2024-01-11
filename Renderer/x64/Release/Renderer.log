@@ -2,15 +2,6 @@
 D:\Renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
   (编译源文件“main.cpp”)
   
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         with
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244:             T=float
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         and
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244:             T=int
-D:\Renderer\Renderer\main.cpp(64,30): warning C4244:         ]
 D:\Renderer\Renderer\main.cpp(65,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
 D:\Renderer\Renderer\main.cpp(65,30): warning C4244:         with
 D:\Renderer\Renderer\main.cpp(65,30): warning C4244:         [
@@ -29,9 +20,18 @@ D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         and
 D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         [
 D:\Renderer\Renderer\main.cpp(66,30): warning C4244:             T=int
 D:\Renderer\Renderer\main.cpp(66,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(67,30): warning C4244:         ]
   正在生成代码
-  81 of 602 functions (13.5%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    6 functions had inline decision re-evaluated but remain unchanged
+  5 of 603 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   Renderer.vcxproj -> D:\Renderer\x64\Release\Renderer.exe
