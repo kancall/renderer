@@ -77,7 +77,7 @@ Vec3f barycentric(Vec3i* points, Vec2i p)
 	return Vec3f(u, v, (1 - u - v));
 }
 
-void triangle(Vec3i* points, IShader& shader, Vec2f* uv, vector<vector<int>>& zbuffer, TGAImage& image)
+void triangle(Vec3i* points, IShader& shader, vector<vector<int>>& zbuffer, TGAImage& image)
 {
 	Vec2i bboxMax = Vec2i(0, 0), bboxMin = Vec2i(image.get_width() - 1, image.get_height() - 1);
 
@@ -98,13 +98,11 @@ void triangle(Vec3i* points, IShader& shader, Vec2f* uv, vector<vector<int>>& zb
 			Vec3f bc = barycentric(points, Vec2i(x, y)); //这里传入重心坐标计算公式的p点是个二维值
 			if (bc.x < 0 || bc.y < 0 || bc.z < 0) //得到的重心值不在0 1范围内，所以不在三角形内
 				continue;
-			//根据重心坐标插值，得到点对应的uv值
-			Vec2f pixelUV = uv[0] * bc.x + uv[1] * bc.y + uv[2] * bc.z;
 			//根据重心坐标三个分量，求点的z值
 			float z = points[0].z * bc.x + points[1].z * bc.y + points[2].z * bc.z;
 
 			TGAColor color;
-			bool clip = shader.fragment(bc, color, pixelUV);
+			bool clip = shader.fragment(bc, color);
 			if (zbuffer[x][y] < z && !clip)
 			{
 				zbuffer[x][y] = z;

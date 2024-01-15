@@ -1,14 +1,20 @@
 ﻿  main.cpp
-D:\Renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
-  (编译源文件“main.cpp”)
-  
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         with
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244:             T=float
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         and
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244:             T=int
-D:\Renderer\Renderer\main.cpp(90,31): warning C4244:         ]
-  Renderer.vcxproj -> D:\Renderer\x64\Debug\Renderer.exe
+E:\vs c++ practice\renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\main.cpp(92,31): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+  our_gl.cpp
+E:\vs c++ practice\renderer\Renderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\vs c++ practice\renderer\Renderer\our_gl.cpp(108,21): warning C4244: “=”: 从“float”转换到“_Ty”，可能丢失数据
+          with
+          [
+              _Ty=int
+          ]
+  正在生成代码...
+  Renderer.vcxproj -> E:\vs c++ practice\renderer\x64\Debug\Renderer.exe
