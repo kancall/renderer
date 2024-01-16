@@ -13,6 +13,7 @@ private:
 	std::vector<Vec2f> uv_; //存储模型的纹理坐标
 	TGAImage diffusemap_; //存放纹理贴图
 	TGAImage normalmap_; //存放法线贴图
+	TGAImage specularmap_; //放高光
 	void load_texture(std::string filename, const char* suffix, TGAImage& image);
 public:
 	Model(const char *filename);
@@ -26,6 +27,7 @@ public:
 	std::vector<int> face(int idx); //根据面索引获取这个面所有顶点对应在verts里的下标
 	TGAColor diffuse(Vec2f uv);
 	Vec3f normal(Vec2f uv); //根据uv值获取法线贴图纹理
+	float specular(Vec2f uv); //高光亮的程度
 };
 
 #endif //__MODEL_H__

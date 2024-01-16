@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>E:\vs c++ practice\renderer\x64\Debug\Renderer.exe</FullPath>
+      <FullPath>D:\Renderer\x64\Debug\Renderer.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

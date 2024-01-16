@@ -20,6 +20,11 @@ Vec3f cross(Vec3f a, Vec3f b)
 	return Vec3f(a.y * b.z - b.y * a.z, -a.x * b.z + b.x * a.z, a.x * b.y - b.x * a.y);
 }
 
+Vec3f reflect(Vec3f normal, Vec3f light)
+{
+	Vec3f res = normal * (normal * light * 2.f) - light;
+	return res;
+}
 void lookAt(Vec3f camera, Vec3f center, Vec3f up)
 {
 	Vec3f z = (camera - center).normalize();

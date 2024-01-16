@@ -17,6 +17,8 @@ void projection(Vec3f camera, Vec3f center);
 void viewport(int x, int y, int w, int h);
 void lookAt(Vec3f camera, Vec3f center, Vec3f up);
 
+Vec3f reflect(Vec3f normal, Vec3f light);
+
 struct IShader 
 {
 	virtual ~IShader();
