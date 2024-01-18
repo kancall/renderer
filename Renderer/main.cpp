@@ -59,13 +59,12 @@ struct Shader :public IShader
 		Vec3f light = proj<3>(uniform_M * embed<4>(lightDir)).normalize();
 		Vec3f reflectLight = reflect(normal, light).normalize();
 
-		float spec = pow(std::max(reflectLight.z, 0.0f), model->specular(uv));
-		float diff = std::max(0.f, normal * light);
+		float spec = pow(std::max(reflectLight.z, 0.0f), model->specular(uv)); //高光
+		float intensity = std::max(0.f, normal * light); //光强，看相似度
 		TGAColor diffuseColor = model->diffuse(uv);
-		float intensity = std::max(0.f, dot(normal, light)); //光线在法线方向的分量
 
 		color = diffuseColor;
-		for (int i = 0; i < 3; i++) color[i] = std::min<float>(5 + diffuseColor[i] * (diff + .6 * spec), 255);
+		for (int i = 0; i < 3; i++) color[i] = std::min<float>(5 + diffuseColor[i] * (intensity + .6 * spec), 255); //得到最终颜色值
 
 		return false; //后续可以添加颜色值之类的判断来选择是否剔除像素
 	}

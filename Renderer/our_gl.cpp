@@ -22,7 +22,7 @@ Vec3f cross(Vec3f a, Vec3f b)
 
 Vec3f reflect(Vec3f normal, Vec3f light)
 {
-	Vec3f res = normal * (normal * light * 2.f) - light;
+	Vec3f res = normal * dot(light, normal) * 2.f - light;
 	return res;
 }
 void lookAt(Vec3f camera, Vec3f center, Vec3f up)
