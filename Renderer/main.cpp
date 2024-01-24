@@ -70,6 +70,36 @@ struct Shader :public IShader
 	}
 };
 
+struct TangentShader :IShader
+{
+	mat<2, 3, float> vertex_uv;
+	mat<3, 3, float> vertex_nm; //存储三个顶点的法线
+
+	mat<4, 4, float> uniform_MIT = (Projection * ModelView).invert_transpose(); //逆矩阵
+	virtual Vec4f vertex(int iface, int nvert)
+	{
+		vertex_uv.set_col(nvert, model->uv(iface, nvert));
+		vertex_nm.set_col(nvert, proj<3>(embed<4>(model->norm(iface, nvert))));
+		Vec4f v = embed<4>(model->vert(iface, nvert));
+
+		return Viewport * Projection * ModelView * v;
+	}
+
+	virtual bool fragment(Vec3f bc, TGAColor& color)
+	{
+		Vec2f uv = vertex_uv * bc;
+		Vec3f normal = (vertex_nm * bc).normalize();
+
+		//通过TBN矩阵将法线变换到世界空间中去
+
+
+		float diff = max(dot(normal, lightDir), 0.f);
+		color = model->diffuse(uv) * diff;
+
+		return false;
+	}
+};
+
 int main()
 {
 	model = new Model("obj/african_head.obj");
@@ -81,7 +111,7 @@ int main()
 	viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
 	projection(camera, center);
 
-	Shader shader;
+	TangentShader shader;
 	for (int i = 0; i < model->nfaces(); i++) //外循环遍历所有三角形
 	{
 		Vec4f screen[3];
