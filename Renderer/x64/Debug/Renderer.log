@@ -12,13 +12,13 @@ D:\Renderer\Renderer\main.cpp(67,57): warning C4244:         with
 D:\Renderer\Renderer\main.cpp(67,57): warning C4244:         [
 D:\Renderer\Renderer\main.cpp(67,57): warning C4244:             _Ty=float
 D:\Renderer\Renderer\main.cpp(67,57): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244:         with
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244:             T=float
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244:         ]
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244:         and
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244:         [
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244:             T=int
-D:\Renderer\Renderer\main.cpp(125,31): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244:         with
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244:             T=float
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244:         ]
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244:         and
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244:         [
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244:             T=int
+D:\Renderer\Renderer\main.cpp(147,31): warning C4244:         ]
   Renderer.vcxproj -> D:\Renderer\x64\Debug\Renderer.exe
