@@ -7,14 +7,15 @@
 #include "our_gl.h"
 using namespace std;
 
-Vec3f camera(1, 0, 5);
+Vec3f camera(1, 1, 4);
 Vec3f center(0, 0, 0);
 Vec3f up(0, 1, 0);
-Vec3f lightDir = Vec3f(1, 1, 1).normalize();
+Vec3f lightDir = Vec3f(2, 1, 0);
 
 Model* model = NULL;
 int width = 800;
 int height = 800;
+int depth = 255;
 
 struct GouraudShader :public IShader
 {
@@ -83,7 +84,7 @@ struct TangentShader :IShader
 		vertex_uv.set_col(nvert, model->uv(iface, nvert));
 		vertex_nm.set_col(nvert, proj<3>(uniform_MIT * embed<4>(model->norm(iface, nvert))));
 		Vec4f point = Viewport * Projection * ModelView * embed<4>(model->vert(iface, nvert));
-		vertexs.set_col(nvert, proj<3>(point / point[3]));
+		vertexs.set_col(nvert, proj<3>(point / point[3])); //齐次坐标的归一化，防止得到的坐标w不等于1
 		return  point;
 	}
 
@@ -121,6 +122,25 @@ struct TangentShader :IShader
 	}
 };
 
+struct DepthShader : IShader
+{
+	mat<3, 3, float> vertexs;
+	virtual Vec4f vertex(int iface, int nvert)
+	{
+		Vec4f v = Viewport * Projection * ModelView * embed<4>(model->vert(iface, nvert));
+		vertexs.set_col(nvert, proj<3>(v / v[3]));
+
+		return v;
+	}
+	virtual bool fragment(Vec3f bc, TGAColor& color)
+	{
+		Vec3f p = vertexs * bc;
+		color = TGAColor(255, 255, 255) * (p.z / depth);
+
+		return false;
+	}
+};
+
 int main()
 {
 	model = new Model("obj/african_head.obj");
@@ -128,11 +148,11 @@ int main()
 	TGAImage zbimage(width, height, TGAImage::GRAYSCALE);
 	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN));
 
-	lookAt(camera, center, up);
+	lookAt(lightDir, center, up);
 	viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
-	projection(camera, center);
+	projection(lightDir, center);
 
-	TangentShader shader;
+	DepthShader shader;
 	for (int i = 0; i < model->nfaces(); i++) //外循环遍历所有三角形
 	{
 		Vec4f screen[3];
