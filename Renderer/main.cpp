@@ -141,6 +141,36 @@ struct DepthShader : IShader
 	}
 };
 
+struct ShadowShader :IShader
+{
+	mat<2, 3, float> vertex_uv;
+	mat<4, 4, float> uniform_M = Projection * ModelView;
+	mat<4, 4, float> uniform_MIT = (Projection * ModelView).invert_transpose(); //逆矩阵
+	virtual Vec4f vertex(int iface, int nvert) //返回变换后的顶点
+	{
+		vertex_uv.set_col(nvert, model->uv(iface, nvert));
+		Vec4f v = embed<4>(model->vert(iface, nvert));
+
+		return Viewport * Projection * ModelView * v;
+	}
+	virtual bool fragment(Vec3f bc, TGAColor& color)
+	{
+		Vec2f uv = vertex_uv * bc;
+		Vec3f normal = proj<3>(uniform_MIT * embed<4>(model->normal(uv))).normalize();
+		Vec3f light = proj<3>(uniform_M * embed<4>(lightDir)).normalize();
+		Vec3f reflectLight = reflect(normal, light).normalize();
+
+		float spec = pow(std::max(reflectLight.z, 0.0f), model->specular(uv)); //高光
+		float intensity = std::max(0.f, normal * light); //光强，看相似度
+		TGAColor diffuseColor = model->diffuse(uv);
+
+		color = diffuseColor;
+		for (int i = 0; i < 3; i++) color[i] = std::min<float>(5 + diffuseColor[i] * (intensity + .6 * spec), 255); //得到最终颜色值
+
+		return false; //后续可以添加颜色值之类的判断来选择是否剔除像素
+	}
+};
+
 int main()
 {
 	model = new Model("obj/african_head.obj");
