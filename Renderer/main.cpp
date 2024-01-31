@@ -10,7 +10,7 @@ using namespace std;
 Vec3f camera(1, 1, 4);
 Vec3f center(0, 0, 0);
 Vec3f up(0, 1, 0);
-Vec3f lightDir = Vec3f(2, 1, 0);
+Vec3f lightDir = Vec3f(1, 1, 0);
 
 Model* model = NULL;
 int width = 800;
@@ -143,18 +143,45 @@ struct DepthShader : IShader
 
 struct ShadowShader :IShader
 {
+	mat<3, 3, float> vertexs;
 	mat<2, 3, float> vertex_uv;
+	mat<4, 4, float> uniform_MVP_Light; //点从模型坐标转换到光照视角的坐标
+	mat<4, 4, float> uniform_MVP_Eye_Revert = (Viewport * Projection * ModelView).invert(); //点从模型坐标转换到摄像机视角的坐标
 	mat<4, 4, float> uniform_M = Projection * ModelView;
 	mat<4, 4, float> uniform_MIT = (Projection * ModelView).invert_transpose(); //逆矩阵
+	vector<vector<int>> deepbuffer;
+
+	ShadowShader(mat<4, 4, float> mvp_light,vector<vector<int>>&deep)
+	{
+		uniform_MVP_Light = mvp_light;
+		deepbuffer = deep;
+	}
 	virtual Vec4f vertex(int iface, int nvert) //返回变换后的顶点
 	{
 		vertex_uv.set_col(nvert, model->uv(iface, nvert));
-		Vec4f v = embed<4>(model->vert(iface, nvert));
+		Vec4f v = Viewport * Projection * ModelView * embed<4>(model->vert(iface, nvert));
+		vertexs.set_col(nvert, proj<3>(v / v[3]));
 
-		return Viewport * Projection * ModelView * v;
+		return  v;
 	}
 	virtual bool fragment(Vec3f bc, TGAColor& color)
 	{
+		Vec4f lightVertex = uniform_MVP_Light * uniform_MVP_Eye_Revert * embed<4>(vertexs * bc); //光线坐标系下的模型坐标
+		lightVertex = lightVertex / lightVertex[3]; //矫正下，防止齐次坐标为非1
+		//float shadow = getDepth(depthImage, Vec2f(lightVertex[0], lightVertex[1])); 
+		float shadow = 1;
+		//这里还有点问题，按道理来说不需要判断范围，mark一下
+		if (int(lightVertex[0]) < 800 && int(lightVertex[0]) >= 0 && int(lightVertex[1]) < 800 && int(lightVertex[1]) >= 0)
+		{
+			shadow = deepbuffer[int(lightVertex[0])][int(lightVertex[1])];//阴影图上的深度
+		}
+		if (shadow < lightVertex[2]) //和当前点离光线的距离作比较，
+		{
+			shadow = 1;
+		}
+		else
+			shadow = 0.3f;
+
 		Vec2f uv = vertex_uv * bc;
 		Vec3f normal = proj<3>(uniform_MIT * embed<4>(model->normal(uv))).normalize();
 		Vec3f light = proj<3>(uniform_M * embed<4>(lightDir)).normalize();
@@ -165,7 +192,7 @@ struct ShadowShader :IShader
 		TGAColor diffuseColor = model->diffuse(uv);
 
 		color = diffuseColor;
-		for (int i = 0; i < 3; i++) color[i] = std::min<float>(5 + diffuseColor[i] * (intensity + .6 * spec), 255); //得到最终颜色值
+		for (int i = 0; i < 3; i++) color[i] = std::min<float>(5 + diffuseColor[i] * shadow * (intensity + .6 * spec), 255); //得到最终颜色值
 
 		return false; //后续可以添加颜色值之类的判断来选择是否剔除像素
 	}
@@ -174,33 +201,61 @@ struct ShadowShader :IShader
 int main()
 {
 	model = new Model("obj/african_head.obj");
+	TGAImage depthImage(width, height, TGAImage::RGB);
 	TGAImage image(width, height, TGAImage::RGB);
 	TGAImage zbimage(width, height, TGAImage::GRAYSCALE);
 	vector<vector<int>> zbuffer(width, vector<int>(height, INT_MIN));
+	vector<vector<int>> deepbuffer(width, vector<int>(height, INT_MIN));
 
-	lookAt(lightDir, center, up);
-	viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
-	projection(lightDir, center);
-
-	DepthShader shader;
-	for (int i = 0; i < model->nfaces(); i++) //外循环遍历所有三角形
 	{
-		Vec4f screen[3];
-		for (int t = 0; t < 3; t++) //内循环遍历三角形所有顶点
-		{
-			screen[t] = shader.vertex(i, t);
-		}
-		Vec3i points[3];
-		for (int i = 0; i < 3; i++)
-		{
-			for (int t = 0; t < 3; t++)
-				points[t][i] = screen[t][i];
-		}
-		triangle(points, shader, zbuffer, image);
-	}
+		lookAt(lightDir, center, up);
+		viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
+		projection(lightDir, center);
+		lightDir.normalize();
 
-	image.flip_vertically();
-	image.write_tga_file("output.tga");
+		DepthShader shader;
+		for (int i = 0; i < model->nfaces(); i++) //外循环遍历所有三角形
+		{
+			Vec4f screen[3];
+			for (int t = 0; t < 3; t++) //内循环遍历三角形所有顶点
+			{
+				screen[t] = shader.vertex(i, t);
+			}
+			Vec3i points[3];
+			for (int i = 0; i < 3; i++)
+			{
+				for (int t = 0; t < 3; t++)
+					points[t][i] = screen[t][i];
+			}
+			triangle(points, shader, deepbuffer, depthImage);
+		}
+		depthImage.flip_vertically();
+		depthImage.write_tga_file("depth.tga");
+	}
+	mat<4, 4, float> uniform_MVP_Light = Viewport * Projection * ModelView;
+	{
+		lookAt(camera, center, up);
+		viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
+		projection(camera, center);
+		ShadowShader shader(uniform_MVP_Light, deepbuffer);
+		for (int i = 0; i < model->nfaces(); i++) //外循环遍历所有三角形
+		{
+			Vec4f screen[3];
+			for (int t = 0; t < 3; t++) //内循环遍历三角形所有顶点
+			{
+				screen[t] = shader.vertex(i, t);
+			}
+			Vec3i points[3];
+			for (int i = 0; i < 3; i++)
+			{
+				for (int t = 0; t < 3; t++)
+					points[t][i] = screen[t][i];
+			}
+			triangle(points, shader, zbuffer, image);
+		}
+		image.flip_vertically();
+		image.write_tga_file("output.tga");
+	}
 	//输出深度值
 	for (int i = 0; i < width; i++)
 	{

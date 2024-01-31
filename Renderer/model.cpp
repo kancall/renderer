@@ -48,7 +48,8 @@ Model::Model(const char *filename) : verts_(), faces_(), norms_(), uv_() {
     }
     std::cerr << "# v# " << verts_.size() << " f# " << faces_.size() << " vt# " << uv_.size() << std::endl;
     load_texture(filename, "_diffuse.tga", diffusemap_);
-    load_texture(filename, "_nm_tangent.tga", normalmap_);
+    //load_texture(filename, "_nm_tangent.tga", normalmap_);
+    load_texture(filename, "_nm.tga", normalmap_); //如果用切线空间，记得把这里换回去
     load_texture(filename, "_spec.tga", specularmap_);
 }
 
