@@ -14,6 +14,7 @@ float dot(Vec3f a, Vec3f b);
 Vec3f cross(Vec3f a, Vec3f b);
 
 void projection(Vec3f camera, Vec3f center);
+void projection(float coeff);
 void viewport(int x, int y, int w, int h);
 void lookAt(Vec3f camera, Vec3f center, Vec3f up);
 

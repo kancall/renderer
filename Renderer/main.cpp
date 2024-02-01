@@ -10,7 +10,7 @@ using namespace std;
 Vec3f camera(1, 1, 4);
 Vec3f center(0, 0, 0);
 Vec3f up(0, 1, 0);
-Vec3f lightDir = Vec3f(1, 1, 0);
+Vec3f lightDir = Vec3f(1, 1, 0).normalize();
 
 Model* model = NULL;
 int width = 800;
@@ -151,7 +151,7 @@ struct ShadowShader :IShader
 	mat<4, 4, float> uniform_MIT = (Projection * ModelView).invert_transpose(); //逆矩阵
 	vector<vector<int>> deepbuffer;
 
-	ShadowShader(mat<4, 4, float> mvp_light,vector<vector<int>>&deep)
+	ShadowShader(mat<4, 4, float> mvp_light, vector<vector<int>>& deep)
 	{
 		uniform_MVP_Light = mvp_light;
 		deepbuffer = deep;
@@ -161,26 +161,15 @@ struct ShadowShader :IShader
 		vertex_uv.set_col(nvert, model->uv(iface, nvert));
 		Vec4f v = Viewport * Projection * ModelView * embed<4>(model->vert(iface, nvert));
 		vertexs.set_col(nvert, proj<3>(v / v[3]));
-
 		return  v;
 	}
 	virtual bool fragment(Vec3f bc, TGAColor& color)
 	{
-		Vec4f lightVertex = uniform_MVP_Light * uniform_MVP_Eye_Revert * embed<4>(vertexs * bc); //光线坐标系下的模型坐标
+		Vec4f lightVertex = uniform_MVP_Light * (uniform_MVP_Eye_Revert * embed<4>(vertexs * bc)); //光线坐标系下的模型坐标
 		lightVertex = lightVertex / lightVertex[3]; //矫正下，防止齐次坐标为非1
-		//float shadow = getDepth(depthImage, Vec2f(lightVertex[0], lightVertex[1])); 
-		float shadow = 1;
-		//这里还有点问题，按道理来说不需要判断范围，mark一下
-		if (int(lightVertex[0]) < 800 && int(lightVertex[0]) >= 0 && int(lightVertex[1]) < 800 && int(lightVertex[1]) >= 0)
-		{
-			shadow = deepbuffer[int(lightVertex[0])][int(lightVertex[1])];//阴影图上的深度
-		}
-		if (shadow < lightVertex[2]) //和当前点离光线的距离作比较，
-		{
-			shadow = 1;
-		}
-		else
-			shadow = 0.3f;
+
+		float shadow = deepbuffer[int(lightVertex[0])][int(lightVertex[1])];
+		shadow = 0.3 + 0.7 * (shadow < lightVertex[2] + 43.34f); //把模型和光线的距离添加一个偏移值bias
 
 		Vec2f uv = vertex_uv * bc;
 		Vec3f normal = proj<3>(uniform_MIT * embed<4>(model->normal(uv))).normalize();
@@ -210,8 +199,7 @@ int main()
 	{
 		lookAt(lightDir, center, up);
 		viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
-		projection(lightDir, center);
-		lightDir.normalize();
+		projection(0);
 
 		DepthShader shader;
 		for (int i = 0; i < model->nfaces(); i++) //外循环遍历所有三角形
@@ -237,6 +225,7 @@ int main()
 		lookAt(camera, center, up);
 		viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
 		projection(camera, center);
+
 		ShadowShader shader(uniform_MVP_Light, deepbuffer);
 		for (int i = 0; i < model->nfaces(); i++) //外循环遍历所有三角形
 		{

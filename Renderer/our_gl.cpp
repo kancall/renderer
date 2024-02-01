@@ -53,6 +53,12 @@ void projection(Vec3f camera, Vec3f center)
 	Projection[3][2] = -1.f / (camera - center).norm();
 }
 
+void projection(float coeff)
+{
+	Projection = Matrix::identity();
+	Projection[3][2] = coeff;
+}
+
 //ViewPort Transformation，将坐标从【-1，1】的范围映射到屏幕输出的范围中
 void viewport(int x, int y, int w, int h) 
 {
@@ -75,10 +81,17 @@ void viewport(int x, int y, int w, int h)
 Vec3f barycentric(Vec3i* points, Vec2i p)
 {
 	//根据games101 p9 16分12的公式算的
-	float u = (float)((p.y - points[1].y) * (points[2].x - points[1].x) - (p.x - points[1].x) * (points[2].y - points[1].y)) /
-		((points[0].y - points[1].y) * (points[2].x - points[0].x) - (points[0].x - points[1].x) * (points[2].y - points[0].y));
-	float v = (float)((p.y - points[2].y) * (points[0].x - points[2].x) - (p.x - points[2].x) * (points[0].y - points[2].y)) /
-		((points[0].x - points[2].x) * (points[1].y - points[2].y) - (points[0].y - points[2].y) * (points[1].x - points[2].x));
+	float u0 = (float)((p.y - points[1].y) * (points[2].x - points[1].x) - (p.x - points[1].x) * (points[2].y - points[1].y));
+	float u1= ((points[0].y - points[1].y) * (points[2].x - points[0].x) - (points[0].x - points[1].x) * (points[2].y - points[0].y));
+	float v0 = (float)((p.y - points[2].y) * (points[0].x - points[2].x) - (p.x - points[2].x) * (points[0].y - points[2].y));
+	float v1= ((points[0].x - points[2].x) * (points[1].y - points[2].y) - (points[0].y - points[2].y) * (points[1].x - points[2].x));
+
+	//要注意除法被除数不能为0，不然会计算出一个-nan(ind)的数字！一定要判断一下是否为0
+	if (u1 == 0 || v1 == 0)
+		return Vec3f(-1, 1, 1);
+
+	float u = u0 / u1;
+	float v = v0 / v1;
 	return Vec3f(u, v, (1 - u - v));
 }
 
