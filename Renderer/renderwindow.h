@@ -16,6 +16,11 @@ public:
     explicit RenderWindow(QWidget *parent = nullptr);
     ~RenderWindow();
 
+    QImage output;
+    QPainter* painter;
+
+    void setPointColor(int x,int y,QRgb color); //设置指定点为指定颜色
+
 protected:
     void paintEvent(QPaintEvent* event) override;
 

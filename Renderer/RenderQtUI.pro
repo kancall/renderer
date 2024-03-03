@@ -27,6 +27,7 @@ CONFIG += c++11
 SOURCES += \
         geometry.cpp \
         main.cpp \
+        mainRender.cpp \
         model.cpp \
         our_gl.cpp \
         renderwindow.cpp \

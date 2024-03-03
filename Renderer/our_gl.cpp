@@ -1,5 +1,6 @@
 #include "model.h"
 #include "our_gl.h"
+#include "renderwindow.h"
 using namespace std;
 
 const int depth = 255;
@@ -95,6 +96,13 @@ Vec3f barycentric(Vec3i* points, Vec2i p)
 	return Vec3f(u, v, (1 - u - v));
 }
 
+void setPointColor(int x,int y, TGAColor tgaColor)
+{
+    RenderWindow rw;
+    QRgb color = qRgb(tgaColor[2], tgaColor[1], tgaColor[0]);
+    rw.setPointColor(x, y, color);
+}
+
 void triangle(Vec3i* points, IShader& shader, vector<vector<int>>& zbuffer, TGAImage& image)
 {
 	Vec2i bboxMax = Vec2i(0, 0), bboxMin = Vec2i(image.get_width() - 1, image.get_height() - 1);
@@ -125,6 +133,9 @@ void triangle(Vec3i* points, IShader& shader, vector<vector<int>>& zbuffer, TGAI
 			{
 				zbuffer[x][y] = z;
 				image.set(x, y, color);
+
+                //qtµÄÍ¼Æ¬¸³Öµ
+                setPointColor(x, y, color);
 			}
 		}
 	}
