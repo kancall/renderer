@@ -20,13 +20,13 @@ void lookAt(Vec3f camera, Vec3f center, Vec3f up);
 
 Vec3f reflect(Vec3f normal, Vec3f light);
 
-struct IShader 
+struct IShader
 {
-	virtual ~IShader();
-	virtual Vec4f vertex(int iface, int nvert) = 0;
-	virtual bool fragment(Vec3f bc, TGAColor& color) = 0;
+    virtual ~IShader();
+    virtual Vec4f vertex(int iface, int nvert) = 0;
+    virtual bool fragment(Vec3f bc, TGAColor& color) = 0;
 };
 
-void triangle(Vec3i* points, IShader& shader, vector<vector<int>>& zbuffer, TGAImage& image);
+//void triangle(Vec3i* points, IShader& shader, vector<vector<int>>& zbuffer, TGAImage& image);  绘制三角形放到ui绘制类里
 
 #endif // !__OUR_GL_H__
